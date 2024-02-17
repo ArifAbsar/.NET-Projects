@@ -1,0 +1,26 @@
+﻿
+@{
+    ViewBag.Title = "Login";
+    Layout = null;
+    string customCssUrl = Url.Content("~/Content/login.css");
+}
+<link href="@customCssUrl" rel="stylesheet" type="text/css"/>
+
+<body>
+    <center>
+        <h2>Login</h2>
+    </center>
+    
+    <center>
+        <div >
+            <form class="form-control">
+                <input type="text" class="text-left" name="U_name" placeholder="Username" /><br />
+                <input type="password" class="text-left" name="pass" placeholder="Password" /><br />
+                <button class="btn-default">Login</button>
+            </form>
+        </div>
+    </center>
+</body>
+
+
+
