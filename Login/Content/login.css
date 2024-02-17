@@ -1,3 +1,49 @@
-﻿body {
+﻿body, html {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
     background-color: rgb(59 38 38);
+}
+.container {
+    text-align: center;
+    
+}
+.header{
+    margin-bottom:20px;
+    color:white;
+    font-size:30px;
+}
+.login-form{
+    
+}
+.U_name {
+  margin-top:28px;
+    
+}
+input[type=text] {
+    border: 8px solid white;
+    border-radius: 1px;
+    inline-size: 250px;
+    outline: 8px solid white;
+}
+input[type=password] {
+    border: 8px solid white;
+    border-radius: 1px;
+    inline-size: 250px;
+    outline: 8px solid white;
+}
+input[type=submit] {
+    border: 8px solid white;
+    border-radius: 1px;
+    inline-size: 150px;
+    outline:8px solid white;
+}
+.password {
+    margin-top: 30px;
+}
+.submit {
+    margin-top: 30px;
 }
