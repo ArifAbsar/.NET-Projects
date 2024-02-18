@@ -1,31 +1,27 @@
 ﻿using System;
-using System.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace Login.DataObjects
 {
-    public partial class CrudContext : DbContext
+    public partial class crudContext : DbContext
     {
-        public CrudContext()
+        public crudContext()
         {
         }
 
-        public CrudContext(DbContextOptions<CrudContext> options)
+        public crudContext(DbContextOptions<crudContext> options)
             : base(options)
         {
         }
 
         public virtual DbSet<User> User { get; set; }
-
+        
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-                string connectionString = ConfigurationManager.ConnectionStrings["MyConnectionString"].ConnectionString;
-
-                // Use the retrieved connection string with optionsBuilder.UseMySQL
-                optionsBuilder.UseMySQL(connectionString);
+                optionsBuilder.UseMySQL("server=localhost;port=3306;user=root;password='';database=crud");
             }
         }
 

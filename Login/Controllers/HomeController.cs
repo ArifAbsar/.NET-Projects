@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Login.DataObjects;
+using Login.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -13,12 +15,7 @@ namespace Login.Controllers
             return View();
         }
 
-        public ActionResult About()
-        {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
-        }
+       
 
         public ActionResult Contact()
         {
@@ -26,9 +23,38 @@ namespace Login.Controllers
 
             return View();
         }*/
-        public ActionResult Login()
+        public ActionResult About()
         {
+            ViewBag.Message = "Your application description page.";
+
             return View();
         }
+        [HttpGet]
+        public ActionResult Login()
+        {
+            return View(new login());
+        }
+        [HttpPost]
+        public ActionResult Login(User u)
+        {
+            if (ModelState.IsValid)
+            {
+                if (ValidUser(u.UName, u.Pass))
+                {
+                    return RedirectToAction("About");
+                }
+            }
+            return View(u);
+        }
+        public bool ValidUser(string username, string password)
+        {
+            var db = new crudContext();
+            var user = (from u in db.User
+                        where u.UName == username && u.Pass == password
+                        select u).FirstOrDefault();
+
+            return user != null;
+        }
+
     }
 }
