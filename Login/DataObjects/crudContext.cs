@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
@@ -21,7 +22,9 @@ namespace Login.DataObjects
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseMySQL("server=localhost;port=3306;user=root;password='';database=crud");
+                string connectionString = ConfigurationManager.ConnectionStrings["MySqlConnection"].ConnectionString;
+
+                optionsBuilder.UseMySQL(connectionString);
             }
         }
 
