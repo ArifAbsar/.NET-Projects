@@ -23,6 +23,7 @@ namespace Login.Controllers
 
             return View();
         }*/
+        [HttpGet]
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
@@ -35,16 +36,16 @@ namespace Login.Controllers
             return View(new login());
         }
         [HttpPost]
-        public ActionResult Login(User u)
+        public ActionResult Login(string uname,string pass)
         {
-            if (ModelState.IsValid)
-            {
-                if (ValidUser(u.UName, u.Pass))
+           
+            
+                if (ValidUser(uname, pass))
                 {
                     return RedirectToAction("About");
                 }
-            }
-            return View(u);
+            
+            return View();
         }
         public bool ValidUser(string username, string password)
         {
