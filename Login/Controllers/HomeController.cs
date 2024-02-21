@@ -36,25 +36,23 @@ namespace Login.Controllers
             return View(new login());
         }
         [HttpPost]
-        public ActionResult Login(string uname,string pass)
-        {
-           
-            
-                if (ValidUser(uname, pass))
-                {
-                    return RedirectToAction("About");
-                }
-            
-            return View();
-        }
-        public bool ValidUser(string username, string password)
+        public ActionResult Login(string U_name,string pass)
         {
             var db = new crudContext();
             var user = (from u in db.User
-                        where u.UName == username && u.Pass == password
+                        where u.UName == U_name && u.Pass == pass
                         select u).FirstOrDefault();
 
-            return user != null;
+            if (user != null){
+                return RedirectToAction("About");
+            }
+
+            else
+            {
+                return View();
+            }
+
+            
         }
 
     }
