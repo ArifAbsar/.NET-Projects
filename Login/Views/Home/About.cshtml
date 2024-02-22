@@ -1,6 +1,9 @@
 ﻿@{
     ViewBag.Title = "About";
+    Layout = null;
+    string customCssUrl = Url.Content("~/Content/login.css");
 }
+<link href="@customCssUrl" rel="stylesheet" type="text/css"/>
 <h2>@ViewBag.Title.</h2>
 <h3>@ViewBag.Message</h3>
 
