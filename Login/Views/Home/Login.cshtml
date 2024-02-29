@@ -1,10 +1,12 @@
-﻿
+﻿@model Login.Models.login
 @{
+
     ViewBag.Title = "Login";
     Layout = null;
     string customCssUrl = Url.Content("~/Content/login.css");
+
 }
-<link href="@customCssUrl" rel="stylesheet" type="text/css"/>
+<link href="@customCssUrl" rel="stylesheet" type="text/css" />
 
 <body>
     <div class="container">
@@ -14,16 +16,17 @@
 
         <div class="login-form">
             <form method="post">
+
                 <div class="U_name">
-                    <input type="text" class="text-left" name=U_name placeholder="Username" /><br />
+                    <input type="text" class="text-left" value=@Model.Uname name="Uname" placeholder="Username" /><br />
                 </div>
                 <div class="password">
-                    <input type="password" class="text-left" name=pass placeholder="Password" /><br />
+                    <input type="password" class="text-left" value=@Model.Pass name="Pass" placeholder="Password" /><br />
                 </div>
                 <div class="submit">
                     <input type="submit" class="btn btn-default" name="login" value="Login" />
                 </div>
-                
+
             </form>
         </div>
     </div>
