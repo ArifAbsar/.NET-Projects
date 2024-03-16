@@ -26,6 +26,8 @@ namespace ZeroHunger.Controllers
                 Session["user"] = user;
                 if (user.TYPE.Equals("Admin"))
                 {
+                    Session["admin"] = user;
+                    Session["A_name"] = l.NAME;
                     return RedirectToAction("Admin","Admin");
                 }
                 if (user.TYPE.Equals("Employee"))
@@ -36,6 +38,7 @@ namespace ZeroHunger.Controllers
             if(resturant!=null && user==null)
             {
                 Session["resturant"] = resturant;
+                Session["user"] = l.NAME;
                 return RedirectToAction("Resturant", "Resturant");
             }
             else

@@ -2,7 +2,18 @@
 
 @{
     ViewBag.Title = "Admin";
+    ViewBag.Name = Session["A_name"];
 }
 
-<h2>Admin</h2>
+<center>
 
+    <h2>@ViewBag.Name</h2>
+    <button id="RequestShow">Show Request</button>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="~/Scripts/showRequest.js"></script>
+
+    <div id="Show" style="display:none">
+        <p>Something will be done here</p>
+    </div>
+
+</center>

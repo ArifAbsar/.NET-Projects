@@ -1,8 +1,26 @@
-﻿@model ZeroHunger.DTO.Collect_RequestDTO
+﻿@model ZeroHunger.DTO.LoginDTO
 
 @{
     ViewBag.Title = "Resturant";
+    ViewBag.name = Session["user"];
 }
 
-<h2>Resturant</h2>
+<center>
+
+
+    <h2>@ViewBag.name</h2>
+
+    <button id="RequestPickup">Request Pickup</button>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="~/Scripts/requestpickup.js"></script>
+
+    <div id="pickup" style="display:none">
+        <form method="post" class="form-control">
+            <input type="text" placeholder="Preserve time" class="form-control" />
+            <input type="text" placeholder="Address" class="form-control" />
+            <input type="submit" value="Submit" class="btn btn-outline-success" />
+        </form>
+    </div>
+
+</center>
 
