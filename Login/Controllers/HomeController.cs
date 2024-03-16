@@ -41,7 +41,7 @@ namespace Login.Controllers
             if (ModelState.IsValid)
             {
                 var db = new crudContext();
-                var user = (from u in db.User
+                var user = (from u in db.User 
                             where u.UName == p.Uname && u.Pass == p.Pass
                             select u).FirstOrDefault();
 

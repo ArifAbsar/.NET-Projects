@@ -7,7 +7,9 @@
 
 }
 <link href="@customCssUrl" rel="stylesheet" type="text/css" />
-
+<p class="text-danger">
+    @Html.ValidationSummary()
+</p>
 <body>
     <div class="container">
         <div class="header">
@@ -19,9 +21,11 @@
 
                 <div class="U_name">
                     <input type="text" class="text-left" value=@Model.Uname name="Uname" placeholder="Username" /><br />
+                    
                 </div>
                 <div class="password">
                     <input type="password" class="text-left" value=@Model.Pass name="Pass" placeholder="Password" /><br />
+                    
                 </div>
                 <div class="submit">
                     <input type="submit" class="btn btn-default" name="login" value="Login" />
