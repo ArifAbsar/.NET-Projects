@@ -14,6 +14,8 @@ namespace ZeroHunger
             "~/Scripts/requestpickup.js"));
             bundles.Add(new ScriptBundle("~/bundles/custom").Include(
             "~/Scripts/showRequest.js"));
+            bundles.Add(new ScriptBundle("~/bundles/custom").Include(
+            "~/Scripts/Assign.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Scripts/jquery.validate*"));

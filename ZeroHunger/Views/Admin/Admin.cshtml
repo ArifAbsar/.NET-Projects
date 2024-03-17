@@ -12,6 +12,7 @@
     <button id="RequestShow">Show Request</button>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="~/Scripts/showRequest.js"></script>
+    <script src="~/Scripts/Assign.js"></script>
 
 
     <div id="Show" style="display:none">
@@ -54,13 +55,14 @@
                         @Html.DisplayFor(modelitem => item.Location)
                     </td>
                     <td>
-                        <a href="@Url.Action("Assign","Admin")" class="btn btn-outline-success">Assign an Employee</a>
+                        <input type="hidden" name="collectID" value=@item.Collectid />
+                        <a href="@Url.Action("Assign","Admin", new { collectid = item.Collectid })" class="btn btn-outline-success">Assign an Employee</a>
                         <a href="@Url.Action("Decline","Admin")" class="btn btn-outline-danger">Decline</a>
                     </td>
                 </tr>
             }
         </table>
-        
+
     </div>
 
 </center>

@@ -19,18 +19,79 @@ namespace ZeroHunger.Controllers
         {
             var data = db.Collect_Request.ToList();
             var convertedData = Convert(data); 
-            var employeeNames = db.Users.Where(u => u.TYPE == "Employee").Select(u => u.U_ID).ToList();
-            ViewBag.EmployeeNames = employeeNames;
-            Session["emp"] = ViewBag.EmployeeNames;
+            //var employeeNames = db.Users.Where(u => u.TYPE == "Employee").Select(u => u.U_ID).ToList();
+            //ViewBag.EmployeeNames = employeeNames;
+            //Session["emp"] = ViewBag.EmployeeNames;
             return View(convertedData); 
         }
+        /*[HttpGet]
         public ActionResult Assign()
         {
-            return View();
+            var user = db.Users.Where(u=>u.TYPE=="Employee").ToList();
+            var convertUser = Convert(user);
+            return View(convertUser);
+        }*/
+        [HttpGet]
+        public ActionResult Assign(int collectID)
+        {
+            ViewBag.CollectId = collectID; // Set ViewBag.CollectId to the value of collectid
+            var user = db.Users.Where(u => u.TYPE == "Employee").ToList();
+            var convertUser = Convert(user);
+            return View(convertUser);
+        }
+        [HttpPost]
+        public ActionResult Assign(int collectID,int emp_id,string name)
+        {
+            ViewBag.name = name;
+            var adminId = db.Users .Where(u => u.NAME.Equals(name)).Select(u => u.U_ID) .FirstOrDefault(); 
+            //var ad = admin.Select;
+            var collect = db.Collect_Request.Find(collectID);
+            if (collect != null)
+            {
+                collect.Approved_by = adminId;
+                collect.Received_By = emp_id;
+                db.SaveChanges();
+                
+            }
+            return RedirectToAction("Admin");
         }
         public ActionResult Decline()
         {
             return View();
+        }
+
+        public static UserDTO Convert(User user)
+        {
+            return new UserDTO
+            {
+                NAME = user.NAME,
+                U_ID = user.U_ID,
+                TYPE = user.TYPE,
+            };
+        }
+        public static User Convert(UserDTO c)
+        {
+            return new User
+            {
+                NAME = c.NAME,
+                U_ID = c.U_ID,
+                TYPE = c.TYPE,
+                
+
+            };
+        }
+        public static List<UserDTO> Convert(List<User> data)
+        {
+
+            var list = new List<UserDTO>();
+            foreach (var item in data)
+            {
+                list.Add(Convert(item));
+
+            }
+            return list;
+
+
         }
 
         public static Collect_RequestDTO Convert(Collect_Request c)

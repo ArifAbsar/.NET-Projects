@@ -1,8 +1,47 @@
-﻿@model ZeroHunger.DTO.UserDTO
+﻿@model IEnumerable<ZeroHunger.DTO.UserDTO> 
 
 @{
     ViewBag.Title = "Assign";
+    ViewBag.Name = Session["A_name"];
 }
 
-<h2>BLAH</h2>
+<h2>@ViewBag.Name</h2>
+
+
+
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.U_ID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NAME)
+            </th>
+            <th>
+                Option
+            </th>
+
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelitem => item.U_ID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelitem => item.NAME)
+                </td>
+                <td>
+                    <form method="post" action="@Url.Action("Assign", "Admin")">
+                        <input type="hidden" name="collectid" value="@ViewBag.CollectId" />
+                        <input type="hidden" name="emp_id" value="@item.U_ID" />
+                        <input type="hidden" name="name" value=@ViewBag.Name/>
+                        <input type="submit" value="Assign" class="btn btn-outline-success" />
+                    </form>
+                </td>
+            </tr>
+        }
+    </table>
+
 
