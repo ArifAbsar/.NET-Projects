@@ -21,17 +21,16 @@ namespace ZeroHunger.EF
         }
     
         public int Collectid { get; set; }
-        public int Restid { get; set; }
+        public Nullable<int> Restid { get; set; }
         public string PreserveTime { get; set; }
         public string Location { get; set; }
         public string Status { get; set; }
-        public int Received_By { get; set; }
-        public int Approved_by { get; set; }
-        public System.DateTime CollectDate { get; set; }
+        public Nullable<int> Received_By { get; set; }
+        public Nullable<int> Approved_by { get; set; }
+        public Nullable<System.DateTime> CollectDate { get; set; }
     
         public virtual User User { get; set; }
         public virtual Resturant Resturant { get; set; }
-        public virtual User User1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Data_History> Data_History { get; set; }
     }

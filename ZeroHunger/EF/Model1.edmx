@@ -10,13 +10,13 @@
             <PropertyRef Name="Collectid" />
           </Key>
           <Property Name="Collectid" Type="int" Nullable="false" />
-          <Property Name="Restid" Type="int" Nullable="false" />
-          <Property Name="PreserveTime" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="Location" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="Status" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="Received_By" Type="int" Nullable="false" />
-          <Property Name="Approved_by" Type="int" Nullable="false" />
-          <Property Name="CollectDate" Type="date" Nullable="false" />
+          <Property Name="Restid" Type="int" />
+          <Property Name="PreserveTime" Type="varchar" MaxLength="50" />
+          <Property Name="Location" Type="varchar" MaxLength="50" />
+          <Property Name="Status" Type="varchar" MaxLength="50" />
+          <Property Name="Received_By" Type="int" />
+          <Property Name="Approved_by" Type="int" />
+          <Property Name="CollectDate" Type="date" />
         </EntityType>
         <EntityType Name="Data_History">
           <Key>
@@ -28,8 +28,8 @@
           <Property Name="PreserveTime" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="Location" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="Status" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="Received_By" Type="int" Nullable="false" />
-          <Property Name="Approved_By" Type="int" Nullable="false" />
+          <Property Name="Received_By" Type="int" />
+          <Property Name="Approved_By" Type="int" />
         </EntityType>
         <EntityType Name="Resturant">
           <Key>
@@ -50,7 +50,7 @@
           <Property Name="TYPE" Type="varchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <Association Name="FK_Collect_Request_Collect_Request">
-          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
           <End Role="Collect_Request" Type="Self.Collect_Request" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="User">
@@ -62,7 +62,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Collect_Request_Resturant">
-          <End Role="Resturant" Type="Self.Resturant" Multiplicity="1" />
+          <End Role="Resturant" Type="Self.Resturant" Multiplicity="0..1" />
           <End Role="Collect_Request" Type="Self.Collect_Request" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Resturant">
@@ -70,18 +70,6 @@
             </Principal>
             <Dependent Role="Collect_Request">
               <PropertyRef Name="Restid" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Collect_Request_User">
-          <End Role="User" Type="Self.User" Multiplicity="1" />
-          <End Role="Collect_Request" Type="Self.Collect_Request" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="U_ID" />
-            </Principal>
-            <Dependent Role="Collect_Request">
-              <PropertyRef Name="Approved_by" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -109,30 +97,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Data_History_User">
-          <End Role="User" Type="Self.User" Multiplicity="1" />
-          <End Role="Data_History" Type="Self.Data_History" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="U_ID" />
-            </Principal>
-            <Dependent Role="Data_History">
-              <PropertyRef Name="Received_By" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Data_History_User1">
-          <End Role="User" Type="Self.User" Multiplicity="1" />
-          <End Role="Data_History" Type="Self.Data_History" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="U_ID" />
-            </Principal>
-            <Dependent Role="Data_History">
-              <PropertyRef Name="Approved_By" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityContainer Name="ZerohungerModelStoreContainer">
           <EntitySet Name="Collect_Request" EntityType="Self.Collect_Request" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Data_History" EntityType="Self.Data_History" Schema="dbo" store:Type="Tables" />
@@ -146,24 +110,12 @@
             <End Role="Resturant" EntitySet="Resturant" />
             <End Role="Collect_Request" EntitySet="Collect_Request" />
           </AssociationSet>
-          <AssociationSet Name="FK_Collect_Request_User" Association="Self.FK_Collect_Request_User">
-            <End Role="User" EntitySet="User" />
-            <End Role="Collect_Request" EntitySet="Collect_Request" />
-          </AssociationSet>
           <AssociationSet Name="FK_Data_History_Collect_Request" Association="Self.FK_Data_History_Collect_Request">
             <End Role="Collect_Request" EntitySet="Collect_Request" />
             <End Role="Data_History" EntitySet="Data_History" />
           </AssociationSet>
           <AssociationSet Name="FK_Data_History_Resturant" Association="Self.FK_Data_History_Resturant">
             <End Role="Resturant" EntitySet="Resturant" />
-            <End Role="Data_History" EntitySet="Data_History" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Data_History_User" Association="Self.FK_Data_History_User">
-            <End Role="User" EntitySet="User" />
-            <End Role="Data_History" EntitySet="Data_History" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Data_History_User1" Association="Self.FK_Data_History_User1">
-            <End Role="User" EntitySet="User" />
             <End Role="Data_History" EntitySet="Data_History" />
           </AssociationSet>
         </EntityContainer>
@@ -177,16 +129,15 @@
             <PropertyRef Name="Collectid" />
           </Key>
           <Property Name="Collectid" Type="Int32" Nullable="false" />
-          <Property Name="Restid" Type="Int32" Nullable="false" />
-          <Property Name="PreserveTime" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Location" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Received_By" Type="Int32" Nullable="false" />
-          <Property Name="Approved_by" Type="Int32" Nullable="false" />
-          <Property Name="CollectDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Restid" Type="Int32" />
+          <Property Name="PreserveTime" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Location" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Received_By" Type="Int32" />
+          <Property Name="Approved_by" Type="Int32" />
+          <Property Name="CollectDate" Type="DateTime" Precision="0" />
           <NavigationProperty Name="User" Relationship="Self.FK_Collect_Request_Collect_Request" FromRole="Collect_Request" ToRole="User" />
           <NavigationProperty Name="Resturant" Relationship="Self.FK_Collect_Request_Resturant" FromRole="Collect_Request" ToRole="Resturant" />
-          <NavigationProperty Name="User1" Relationship="Self.FK_Collect_Request_User" FromRole="Collect_Request" ToRole="User" />
           <NavigationProperty Name="Data_History" Relationship="Self.FK_Data_History_Collect_Request" FromRole="Collect_Request" ToRole="Data_History" />
         </EntityType>
         <EntityType Name="Data_History">
@@ -199,12 +150,10 @@
           <Property Name="PreserveTime" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Location" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Received_By" Type="Int32" Nullable="false" />
-          <Property Name="Approved_By" Type="Int32" Nullable="false" />
+          <Property Name="Received_By" Type="Int32" />
+          <Property Name="Approved_By" Type="Int32" />
           <NavigationProperty Name="Collect_Request" Relationship="Self.FK_Data_History_Collect_Request" FromRole="Data_History" ToRole="Collect_Request" />
           <NavigationProperty Name="Resturant" Relationship="Self.FK_Data_History_Resturant" FromRole="Data_History" ToRole="Resturant" />
-          <NavigationProperty Name="User" Relationship="Self.FK_Data_History_User" FromRole="Data_History" ToRole="User" />
-          <NavigationProperty Name="User1" Relationship="Self.FK_Data_History_User1" FromRole="Data_History" ToRole="User" />
         </EntityType>
         <EntityType Name="Resturant">
           <Key>
@@ -226,12 +175,9 @@
           <Property Name="PASS" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="TYPE" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="Collect_Request" Relationship="Self.FK_Collect_Request_Collect_Request" FromRole="User" ToRole="Collect_Request" />
-          <NavigationProperty Name="Collect_Request1" Relationship="Self.FK_Collect_Request_User" FromRole="User" ToRole="Collect_Request" />
-          <NavigationProperty Name="Data_History" Relationship="Self.FK_Data_History_User" FromRole="User" ToRole="Data_History" />
-          <NavigationProperty Name="Data_History1" Relationship="Self.FK_Data_History_User1" FromRole="User" ToRole="Data_History" />
         </EntityType>
         <Association Name="FK_Collect_Request_Collect_Request">
-          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
           <End Role="Collect_Request" Type="Self.Collect_Request" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="User">
@@ -243,7 +189,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Collect_Request_Resturant">
-          <End Role="Resturant" Type="Self.Resturant" Multiplicity="1" />
+          <End Role="Resturant" Type="Self.Resturant" Multiplicity="0..1" />
           <End Role="Collect_Request" Type="Self.Collect_Request" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Resturant">
@@ -251,18 +197,6 @@
             </Principal>
             <Dependent Role="Collect_Request">
               <PropertyRef Name="Restid" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Collect_Request_User">
-          <End Role="User" Type="Self.User" Multiplicity="1" />
-          <End Role="Collect_Request" Type="Self.Collect_Request" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="U_ID" />
-            </Principal>
-            <Dependent Role="Collect_Request">
-              <PropertyRef Name="Approved_by" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -290,30 +224,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Data_History_User">
-          <End Role="User" Type="Self.User" Multiplicity="1" />
-          <End Role="Data_History" Type="Self.Data_History" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="U_ID" />
-            </Principal>
-            <Dependent Role="Data_History">
-              <PropertyRef Name="Received_By" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Data_History_User1">
-          <End Role="User" Type="Self.User" Multiplicity="1" />
-          <End Role="Data_History" Type="Self.Data_History" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="U_ID" />
-            </Principal>
-            <Dependent Role="Data_History">
-              <PropertyRef Name="Approved_By" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityContainer Name="ZerohungerEntities1" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Collect_Request" EntityType="Self.Collect_Request" />
           <EntitySet Name="Data_History" EntityType="Self.Data_History" />
@@ -327,24 +237,12 @@
             <End Role="Resturant" EntitySet="Resturants" />
             <End Role="Collect_Request" EntitySet="Collect_Request" />
           </AssociationSet>
-          <AssociationSet Name="FK_Collect_Request_User" Association="Self.FK_Collect_Request_User">
-            <End Role="User" EntitySet="Users" />
-            <End Role="Collect_Request" EntitySet="Collect_Request" />
-          </AssociationSet>
           <AssociationSet Name="FK_Data_History_Collect_Request" Association="Self.FK_Data_History_Collect_Request">
             <End Role="Collect_Request" EntitySet="Collect_Request" />
             <End Role="Data_History" EntitySet="Data_History" />
           </AssociationSet>
           <AssociationSet Name="FK_Data_History_Resturant" Association="Self.FK_Data_History_Resturant">
             <End Role="Resturant" EntitySet="Resturants" />
-            <End Role="Data_History" EntitySet="Data_History" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Data_History_User" Association="Self.FK_Data_History_User">
-            <End Role="User" EntitySet="Users" />
-            <End Role="Data_History" EntitySet="Data_History" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Data_History_User1" Association="Self.FK_Data_History_User1">
-            <End Role="User" EntitySet="Users" />
             <End Role="Data_History" EntitySet="Data_History" />
           </AssociationSet>
         </EntityContainer>

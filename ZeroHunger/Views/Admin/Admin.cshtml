@@ -1,4 +1,4 @@
-﻿@model ZeroHunger.DTO.Collect_RequestDTO
+﻿@model IEnumerable<ZeroHunger.DTO.Collect_RequestDTO>
 
 @{
     ViewBag.Title = "Admin";
@@ -13,7 +13,63 @@
     <script src="~/Scripts/showRequest.js"></script>
 
     <div id="Show" style="display:none">
-        <p>Something will be done here</p>
+        <p>
+            
+        </p>
+        <table class="table">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Restid)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Collectid)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PreserveTime)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Location)
+                </th>
+                <th>
+                    Employee
+                </th>
+                <th>
+                    Option
+                </th>
+
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelitem => item.Restid)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelitem => item.Collectid)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelitem => item.PreserveTime)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelitem => item.Location)
+                    </td>
+                    <td>
+                        <form method="post">
+                            <div class="form-group">
+                                @Html.DropDownList("SelectedEmployee", new SelectList(ViewBag.EmployeeNames), "Select Employee", new { @class = "form-control" })
+                            </div>
+                            
+                        </form>
+                        
+                    </td>
+                    <td>
+                        <input type="submit" value="Assign" class="btn btn-outline-success" />
+                        <input type="submit" value="Decline Request" class="btn btn-outline-danger" />
+                    </td>
+                </tr>
+            }
+        </table>
     </div>
 
 </center>

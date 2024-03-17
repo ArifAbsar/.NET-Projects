@@ -18,9 +18,6 @@ namespace ZeroHunger.EF
         public User()
         {
             this.Collect_Request = new HashSet<Collect_Request>();
-            this.Collect_Request1 = new HashSet<Collect_Request>();
-            this.Data_History = new HashSet<Data_History>();
-            this.Data_History1 = new HashSet<Data_History>();
         }
     
         public int U_ID { get; set; }
@@ -30,11 +27,5 @@ namespace ZeroHunger.EF
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Collect_Request> Collect_Request { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Collect_Request> Collect_Request1 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Data_History> Data_History { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Data_History> Data_History1 { get; set; }
     }
 }
