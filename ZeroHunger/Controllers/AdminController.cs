@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Web;
@@ -17,16 +18,21 @@ namespace ZeroHunger.Controllers
         public ActionResult Admin()
         {
             var data = db.Collect_Request.ToList();
-            //var Counts = data.GroupBy(cr => cr.Received_By).ToDictionary(g => g.Key, g => g.Count());
-            //var filteredCollectRequests = data.Where(cr => !Counts.ContainsKey(cr.Received_By) || Counts[cr.Received_By] < 5).ToList();
-            var convert = Convert(data);
-            //var filteredCollectRequestDTOs = Convert(filteredCollectRequests); // Convert Collect_Request to Collect_RequestDTO
-            //var employeeNames = filteredCollectRequestDTOs.Select(cr => cr.Received_By).Distinct().ToList();
-            //ViewBag.EmployeeNames = employeeNames;
-            var employeeNames = db.Users.Where(u => u.TYPE == "Employee").Select(u => u.NAME).ToList();
+            var convertedData = Convert(data); 
+            var employeeNames = db.Users.Where(u => u.TYPE == "Employee").Select(u => u.U_ID).ToList();
             ViewBag.EmployeeNames = employeeNames;
-            return View(convert);
+            Session["emp"] = ViewBag.EmployeeNames;
+            return View(convertedData); 
         }
+        public ActionResult Assign()
+        {
+            return View();
+        }
+        public ActionResult Decline()
+        {
+            return View();
+        }
+
         public static Collect_RequestDTO Convert(Collect_Request c)
         {
             return new Collect_RequestDTO

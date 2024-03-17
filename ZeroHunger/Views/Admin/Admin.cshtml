@@ -3,6 +3,7 @@
 @{
     ViewBag.Title = "Admin";
     ViewBag.Name = Session["A_name"];
+    ViewBag.A_id = Session["A_ID"];
 }
 
 <center>
@@ -12,9 +13,10 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="~/Scripts/showRequest.js"></script>
 
+
     <div id="Show" style="display:none">
         <p>
-            
+
         </p>
         <table class="table">
             <tr>
@@ -29,9 +31,6 @@
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.Location)
-                </th>
-                <th>
-                    Employee
                 </th>
                 <th>
                     Option
@@ -55,21 +54,13 @@
                         @Html.DisplayFor(modelitem => item.Location)
                     </td>
                     <td>
-                        <form method="post">
-                            <div class="form-group">
-                                @Html.DropDownList("SelectedEmployee", new SelectList(ViewBag.EmployeeNames), "Select Employee", new { @class = "form-control" })
-                            </div>
-                            
-                        </form>
-                        
-                    </td>
-                    <td>
-                        <input type="submit" value="Assign" class="btn btn-outline-success" />
-                        <input type="submit" value="Decline Request" class="btn btn-outline-danger" />
+                        <a href="@Url.Action("Assign","Admin")" class="btn btn-outline-success">Assign an Employee</a>
+                        <a href="@Url.Action("Decline","Admin")" class="btn btn-outline-danger">Decline</a>
                     </td>
                 </tr>
             }
         </table>
+        
     </div>
 
 </center>

@@ -28,6 +28,7 @@ namespace ZeroHunger.Controllers
                 {
                     Session["admin"] = user;
                     Session["A_name"] = l.NAME;
+                    Session["A_ID"] = l.U_ID;
                     return RedirectToAction("Admin","Admin");
                 }
                 if (user.TYPE.Equals("Employee"))
