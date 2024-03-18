@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 using ZeroHunger.EF;
@@ -8,6 +10,7 @@ namespace ZeroHunger.DTO
 {
     public class Collect_RequestDTO
     {
+        
         public int Collectid { get; set; }
         public Nullable<int> Restid { get; set; }
         public string PreserveTime { get; set; }

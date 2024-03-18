@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="cd270d0e044e434a89373e09aa87aa00" Name="Diagram1">
+      <Diagram DiagramId="1d91bc5e93cc46888c50ada11e722957" Name="Diagram1">
         <EntityTypeShape EntityType="ZerohungerModel.Collect_Request" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
         <EntityTypeShape EntityType="ZerohungerModel.Data_History" Width="1.5" PointX="5.25" PointY="1.125" IsExpanded="true" />
         <EntityTypeShape EntityType="ZerohungerModel.Resturant" Width="1.5" PointX="0.75" PointY="1.5" IsExpanded="true" />

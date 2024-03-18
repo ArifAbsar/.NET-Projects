@@ -1,4 +1,4 @@
-﻿@model ZeroHunger.DTO.LoginDTO
+﻿@model ZeroHunger.DTO.ResturantDTO
 
 @{
     ViewBag.Title = "Resturant";
@@ -15,9 +15,10 @@
     <script src="~/Scripts/requestpickup.js"></script>
 
     <div id="pickup" style="display:none">
-        <form method="post" class="form-control">
-            <input type="text" placeholder="Preserve time" class="form-control" />
-            <input type="text" placeholder="Address" class="form-control" />
+        <form method="post",action=@Url.Action("Resturant", "Resturant")>
+            <input type="hidden" name="restid" value="@ViewBag.name" /> <!-- Assuming Restid corresponds to the restaurant's ID -->
+            <input type="text" name="PreserveTime" placeholder="Preserve time" class="form-control" />
+            <input type="text" name="Location" placeholder="Address" class="form-control" />
             <input type="submit" value="Submit" class="btn btn-outline-success" />
         </form>
     </div>

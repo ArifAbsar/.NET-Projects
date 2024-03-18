@@ -11,8 +11,7 @@ namespace ZeroHunger.EF
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-
+    
     public partial class User
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -20,8 +19,8 @@ namespace ZeroHunger.EF
         {
             this.Collect_Request = new HashSet<Collect_Request>();
         }
-      
-        public  int U_ID { get; set; }
+    
+        public int U_ID { get; set; }
         public string NAME { get; set; }
         public string PASS { get; set; }
         public string TYPE { get; set; }
