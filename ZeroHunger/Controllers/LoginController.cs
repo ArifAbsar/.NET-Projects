@@ -33,6 +33,7 @@ namespace ZeroHunger.Controllers
                 }
                 if (user.TYPE.Equals("Employee"))
                 {
+                    Session["employee"] = l.NAME;
                     return RedirectToAction("Employee", "Employee");
                 }
             }

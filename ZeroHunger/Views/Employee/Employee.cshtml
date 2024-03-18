@@ -1,8 +1,41 @@
-﻿@model ZeroHunger.DTO.Collect_RequestDTO
+﻿@model IEnumerable< ZeroHunger.DTO.Collect_RequestDTO>
 
 @{
     ViewBag.Title = "Employee";
+    ViewBag.Employee = Session["employee"];
 }
 
-<h2>Employee</h2>
+<h2>@ViewBag.Employee</h2>
 
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Restid)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Location)
+        </th>
+        <th>
+            Option
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelitem => item.Restid)
+            </td>
+            <td>
+                @Html.DisplayFor(modelitem => item.Location)
+            </td>
+            <td>
+                <form method="post" action="">
+                    <input type="hidden" name="Name" value=@ViewBag.Employee>
+                    <input type="submit" name="collect" value="Mark Collected" class="btn btn-outline-success" />
+                </form>
+            </td>
+        </tr>
+
+    }
+    </table>
