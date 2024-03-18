@@ -3,12 +3,13 @@
 @{
     ViewBag.Title = "Admin";
     ViewBag.Name = Session["A_name"];
-    ViewBag.A_id = Session["A_ID"];
+    ViewBag.A_id = Session["ad"];
 }
 
 <center>
 
     <h2>@ViewBag.Name</h2>
+    <h2>@ViewBag.A_id</h2>
     <button id="RequestShow">Show Request</button>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="~/Scripts/showRequest.js"></script>

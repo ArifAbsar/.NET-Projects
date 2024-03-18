@@ -43,13 +43,15 @@ namespace ZeroHunger.Controllers
         public ActionResult Assign(int collectID,int emp_id,string name)
         {
             ViewBag.name = name;
-            var adminId = db.Users .Where(u => u.NAME.Equals(name)).Select(u => u.U_ID) .FirstOrDefault(); 
+            var adminId = db.Users.Where(u => u.NAME.Equals(name, StringComparison.OrdinalIgnoreCase)).Select(u => u.U_ID).FirstOrDefault();
             //var ad = admin.Select;
             var collect = db.Collect_Request.Find(collectID);
             if (collect != null)
             {
                 collect.Approved_by = adminId;
                 collect.Received_By = emp_id;
+                collect.Status = "Approved";
+                collect.CollectDate = DateTime.Now;
                 db.SaveChanges();
                 
             }
