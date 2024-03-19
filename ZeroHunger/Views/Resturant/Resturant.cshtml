@@ -16,7 +16,7 @@
 
     <div id="pickup" style="display:none">
         <form method="post",action=@Url.Action("Resturant", "Resturant")>
-            <input type="hidden" name="restid" value="@ViewBag.name" /> <!-- Assuming Restid corresponds to the restaurant's ID -->
+            <input type="hidden" name="restid" value="@ViewBag.name" /> 
             <input type="text" name="PreserveTime" placeholder="Preserve time" class="form-control" />
             <input type="text" name="Location" placeholder="Address" class="form-control" />
             <input type="submit" value="Submit" class="btn btn-outline-success" />

@@ -17,24 +17,20 @@ namespace ZeroHunger.Controllers
         [HttpGet]
         public ActionResult Admin()
         {
-            var data = db.Collect_Request.ToList();
-            var convertedData = Convert(data); 
-            //var employeeNames = db.Users.Where(u => u.TYPE == "Employee").Select(u => u.U_ID).ToList();
-            //ViewBag.EmployeeNames = employeeNames;
-            //Session["emp"] = ViewBag.EmployeeNames;
-            return View(convertedData); 
+            if (Session["admin"] != null)
+            {
+                var data = db.Collect_Request.ToList();
+                var convertedData = Convert(data);
+
+                return View(convertedData);
+            }
+            return RedirectToAction("Login", "Login");
         }
-        /*[HttpGet]
-        public ActionResult Assign()
-        {
-            var user = db.Users.Where(u=>u.TYPE=="Employee").ToList();
-            var convertUser = Convert(user);
-            return View(convertUser);
-        }*/
+       
         [HttpGet]
         public ActionResult Assign(int collectID)
         {
-            ViewBag.CollectId = collectID; // Set ViewBag.CollectId to the value of collectid
+            ViewBag.CollectId = collectID; 
             var user = db.Users.Where(u => u.TYPE == "Employee").ToList();
             var convertUser = Convert(user);
             return View(convertUser);
@@ -46,7 +42,7 @@ namespace ZeroHunger.Controllers
             var adminId = db.Users.Where(u => u.NAME.Equals(name, StringComparison.OrdinalIgnoreCase)).Select(u => u.U_ID).FirstOrDefault();
             //var ad = admin.Select;
             var collect = db.Collect_Request.Find(collectID);
-            if (collect != null)
+            if (collect != null && collect.Status!="Approved")
             {
                 collect.Approved_by = adminId;
                 collect.Received_By = emp_id;
@@ -55,11 +51,27 @@ namespace ZeroHunger.Controllers
                 db.SaveChanges();
                 
             }
+            else if (collect.Status == "Approved")
+            {
+                TempData["Error"] = "Already Approved";
+                return RedirectToAction("Admin");
+            }
             return RedirectToAction("Admin");
         }
-        public ActionResult Decline()
+        public ActionResult Decline(int collectID)
         {
-            return View();
+            var collect = db.Collect_Request.Find(collectID);
+            if (collect != null && collect.Status != "Rejected")
+            {
+                collect.Status = "Rejected";
+                db.SaveChanges();
+            }
+            else if (collect.Status == "Rejected")
+            {
+                TempData["decline"] = "Already Rejected";
+                return RedirectToAction("Admin");
+            }
+            return RedirectToAction("Admin");
         }
 
         public static UserDTO Convert(User user)

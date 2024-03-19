@@ -1,12 +1,18 @@
-﻿@model IEnumerable< ZeroHunger.DTO.Collect_RequestDTO>
+﻿@model IEnumerable<ZeroHunger.DTO.Collect_RequestDTO>
 
 @{
     ViewBag.Title = "Employee";
     ViewBag.Employee = Session["employee"];
+    ViewBag.Emp = Session["em"];
 }
 
-<h2>@ViewBag.Employee</h2>
-
+<h2>@ViewBag.Emp</h2>
+@if (TempData["collect"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["collect"]
+    </div>
+}
 <table class="table">
     <tr>
         <th>
@@ -31,11 +37,11 @@
             </td>
             <td>
                 <form method="post" action="">
-                    <input type="hidden" name="Name" value=@ViewBag.Employee>
+                    <input type="hidden" name="Name" value=@ViewBag.Emp>
                     <input type="submit" name="collect" value="Mark Collected" class="btn btn-outline-success" />
                 </form>
             </td>
         </tr>
 
     }
-    </table>
+</table>

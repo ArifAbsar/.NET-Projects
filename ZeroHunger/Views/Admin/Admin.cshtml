@@ -4,6 +4,7 @@
     ViewBag.Title = "Admin";
     ViewBag.Name = Session["A_name"];
     ViewBag.A_id = Session["ad"];
+
 }
 
 <center>
@@ -11,11 +12,28 @@
     <h2>@ViewBag.Name</h2>
     <h2>@ViewBag.A_id</h2>
     <button id="RequestShow">Show Request</button>
+    <button id="DataHistory">Show Collect History</button>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="~/Scripts/showRequest.js"></script>
+    <script src="~/Scripts/Datahistory.js"></script>
     <script src="~/Scripts/Assign.js"></script>
-
-
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["Error"]
+        </div>
+    }
+    @if (TempData["decline"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["decline"]
+        </div>
+    }
+    <style>
+        .hidden, .hidden > * {
+            display: none;
+        }
+    </style>
     <div id="Show" style="display:none">
         <p>
 
@@ -57,13 +75,64 @@
                     </td>
                     <td>
                         <input type="hidden" name="collectID" value=@item.Collectid />
+                        <input type="hidden" name="something" value="@item.Approved_by" />
+                        <input type="hidden" name="something1" value="@item.Received_By" />
                         <a href="@Url.Action("Assign","Admin", new { collectid = item.Collectid })" class="btn btn-outline-success">Assign an Employee</a>
-                        <a href="@Url.Action("Decline","Admin")" class="btn btn-outline-danger">Decline</a>
+                        <a href="@Url.Action("Decline","Admin",new { collectid = item.Collectid })" class="btn btn-outline-danger">Decline</a>
                     </td>
                 </tr>
             }
         </table>
 
+    </div>
+
+    <div id="history" style="display:none">
+        <table class="table">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Restid)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Collectid)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PreserveTime)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Location)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Status)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CollectDate)
+                </th>
+            </tr>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelitem => item.Restid)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelitem => item.Collectid)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelitem => item.PreserveTime)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelitem => item.Location)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelitem => item.Status)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelitem => item.CollectDate)
+                    </td>
+
+                </tr>
+            }
+        </table>
     </div>
 
 </center>

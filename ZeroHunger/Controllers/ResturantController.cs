@@ -15,10 +15,10 @@ namespace ZeroHunger.Controllers
         [HttpGet]
         public ActionResult Resturant()
         {
-            /*if (Session["resturant"] == null)
+            if (Session["resturant"] == null)
             {
                 return RedirectToAction("Login","Login");
-            }*/
+            }
             return View();
         }
         [HttpPost]
