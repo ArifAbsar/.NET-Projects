@@ -14,7 +14,7 @@
 
         protected override void Seed(api.EF.NewspaperContext context)
         {
-            Random rand = new Random();
+            /*Random rand = new Random();
             for (int i = 0; i < 1000; i++)
             {
                 //api.EF.table.Category c = new EF.table.Category();
@@ -25,7 +25,7 @@
                 context.News.Add(n);
 
             }
-            context.SaveChanges();
+            context.SaveChanges();*/
         }
     }
 }

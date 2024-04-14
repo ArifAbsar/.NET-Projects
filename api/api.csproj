@@ -93,6 +93,7 @@
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\NewspaperController.cs" />
     <Compile Include="EF\NewspaperContext.cs" />
     <Compile Include="EF\table\Category.cs" />
     <Compile Include="EF\table\News.cs" />
@@ -109,6 +110,9 @@
       <DependentUpon>202404141900132_AddCategoryData.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\CategoryDTO.cs" />
+    <Compile Include="Models\NewsDTO.cs" />
+    <Compile Include="Models\UserDTO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -122,7 +126,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202404141440188_InitializeDatabase.resx">
