@@ -104,6 +104,10 @@
     <Compile Include="Migrations\202404141440188_InitializeDatabase.Designer.cs">
       <DependentUpon>202404141440188_InitializeDatabase.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202404141900132_AddCategoryData.cs" />
+    <Compile Include="Migrations\202404141900132_AddCategoryData.Designer.cs">
+      <DependentUpon>202404141900132_AddCategoryData.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -123,6 +127,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202404141440188_InitializeDatabase.resx">
       <DependentUpon>202404141440188_InitializeDatabase.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202404141900132_AddCategoryData.resx">
+      <DependentUpon>202404141900132_AddCategoryData.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

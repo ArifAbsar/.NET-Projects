@@ -14,10 +14,18 @@
 
         protected override void Seed(api.EF.NewspaperContext context)
         {
-            //  This method will be called after migrating to the latest version.
+            Random rand = new Random();
+            for (int i = 0; i < 1000; i++)
+            {
+                //api.EF.table.Category c = new EF.table.Category();
+                api.EF.table.News n=new EF.table.News();
+                n.CategoryID = rand.Next(1, 1000);
+                n.TITLE = Guid.NewGuid().ToString().Substring(0, 6);
+                n.DATE=DateTime.Now;
+                context.News.Add(n);
 
-            //  You can use the DbSet<T>.AddOrUpdate() helper extension method
-            //  to avoid creating duplicate seed data.
+            }
+            context.SaveChanges();
         }
     }
 }
