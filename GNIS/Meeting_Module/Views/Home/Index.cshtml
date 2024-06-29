@@ -1,0 +1,80 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meeting Minutes</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Meeting Minutes</h2>
+        <form id="meetingForm">
+            <div class="form-group">
+                <label>Customer Type:</label>
+                <div>
+                    <label class="radio-inline"><input type="radio" name="customerType" value="Corporate" checked> Corporate</label>
+                    <label class="radio-inline"><input type="radio" name="customerType" value="Individual"> Individual</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="customerName">Customer Name:</label>
+                <select id="customerName" class="form-control"></select>
+            </div>
+            <div class="form-group">
+                <label for="meetingDate">Date:</label>
+                <input type="date" id="meetingDate" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="meetingTime">Time:</label>
+                <input type="time" id="meetingTime" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="meetingPlace">Meeting Place:</label>
+                <input type="text" id="meetingPlace" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="clientSide">Attends From Client Side:</label>
+                <textarea id="clientSide" class="form-control"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="hostSide">Attends From Host Side:</label>
+                <textarea id="hostSide" class="form-control"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="productService">Interested Product/Service:</label>
+                <select id="productService" class="form-control"></select>
+            </div>
+            <div class="form-group">
+                <label for="quantity">Quantity:</label>
+                <input type="number" id="quantity" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="unit">Unit:</label>
+                <input type="text" id="unit" class="form-control" readonly>
+            </div>
+            <button type="button" id="addProductService" class="btn btn-primary">Add</button>
+            <table class="table mt-3">
+                <thead>
+                    <tr>
+                        <th>SL#</th>
+                        <th>Interested Product/Service Name</th>
+                        <th>Quantity</th>
+                        <th>Unit</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                <tbody id="productServiceTable">
+                    <tr><td colspan="6">No matching records found</td></tr>
+                </tbody>
+            </table>
+            <button type="button" id="saveMeetingMinutes" class="btn btn-success">Save</button>
+        </form>
+    </div>
+    <script src="scripts.js"></script>
+</body>
+</html>
