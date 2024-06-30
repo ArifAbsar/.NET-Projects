@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace BLL.Services
 {
-    internal class Product_Service
+    public class Product_Service
     {
         public static List<Product_ServiceDTO> Get()
         {

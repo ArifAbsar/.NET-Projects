@@ -12,7 +12,7 @@ using DAL.EF.Tables;
 
 namespace BLL.Services
 {
-    internal class Corporate_Service
+    public class Corporate_Service
     {
         public static List<Corporate_CustomerDTO> Get()
         {
