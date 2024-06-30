@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DAL.EF.Tables
+namespace BLL.DTO
 {
-    public class individual_customer_tbl
+    internal class Individual_CustomerDTO
     {
         public int Id { get; set; }
         public string Individual_Customer_Name { get; set; }

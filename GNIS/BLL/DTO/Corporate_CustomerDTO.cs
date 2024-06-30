@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DAL.EF.Tables
+namespace BLL.DTO
 {
-    public class individual_customer_tbl
+    internal class Corporate_CustomerDTO
     {
         public int Id { get; set; }
-        public string Individual_Customer_Name { get; set; }
+        public string Corporate_Customer_Name { get; set; }
     }
 }

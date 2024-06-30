@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\Meeting_Module\packages\EntityFramework.6.4.4\build\EntityFramework.props" Condition="Exists('..\Meeting_Module\packages\EntityFramework.6.4.4\build\EntityFramework.props')" />
+  <Import Project="..\Meeting_Module\packages\EntityFramework.6.5.1\build\EntityFramework.props" Condition="Exists('..\Meeting_Module\packages\EntityFramework.6.5.1\build\EntityFramework.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -35,10 +35,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\Meeting_Module\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
+      <HintPath>..\Meeting_Module\packages\EntityFramework.6.5.1\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\Meeting_Module\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <HintPath>..\Meeting_Module\packages\EntityFramework.6.5.1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -51,22 +51,49 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataFactory.cs" />
     <Compile Include="EF\MeetingContext.cs" />
     <Compile Include="EF\Tables\corporate_customer_tbl.cs" />
     <Compile Include="EF\Tables\individual_customer_tbl.cs" />
+    <Compile Include="EF\Tables\Meeting_Minutes_Details_tbl.cs" />
+    <Compile Include="EF\Tables\Meeting_Minutes_Master_tbl.cs" />
+    <Compile Include="EF\Tables\Product_Service_tbl.cs" />
+    <Compile Include="Interface\IRepo.cs" />
+    <Compile Include="Migrations\202406300406390_initdb.cs" />
+    <Compile Include="Migrations\202406300406390_initdb.Designer.cs">
+      <DependentUpon>202406300406390_initdb.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202406300600057_getpro.cs" />
+    <Compile Include="Migrations\202406300600057_getpro.Designer.cs">
+      <DependentUpon>202406300600057_getpro.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repo\CorporateRepo.cs" />
+    <Compile Include="Repo\IndividualRepo.cs" />
+    <Compile Include="Repo\Prod_ServiceRepo.cs" />
+    <Compile Include="Repo\Repo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\202406300406390_initdb.resx">
+      <DependentUpon>202406300406390_initdb.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202406300600057_getpro.resx">
+      <DependentUpon>202406300600057_getpro.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\Meeting_Module\packages\EntityFramework.6.4.4\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\Meeting_Module\packages\EntityFramework.6.4.4\build\EntityFramework.props'))" />
-    <Error Condition="!Exists('..\Meeting_Module\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\Meeting_Module\packages\EntityFramework.6.4.4\build\EntityFramework.targets'))" />
+    <Error Condition="!Exists('..\Meeting_Module\packages\EntityFramework.6.5.1\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\Meeting_Module\packages\EntityFramework.6.5.1\build\EntityFramework.props'))" />
+    <Error Condition="!Exists('..\Meeting_Module\packages\EntityFramework.6.5.1\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\Meeting_Module\packages\EntityFramework.6.5.1\build\EntityFramework.targets'))" />
   </Target>
-  <Import Project="..\Meeting_Module\packages\EntityFramework.6.4.4\build\EntityFramework.targets" Condition="Exists('..\Meeting_Module\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" />
+  <Import Project="..\Meeting_Module\packages\EntityFramework.6.5.1\build\EntityFramework.targets" Condition="Exists('..\Meeting_Module\packages\EntityFramework.6.5.1\build\EntityFramework.targets')" />
 </Project>
