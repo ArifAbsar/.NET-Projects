@@ -12,9 +12,9 @@ using DAL.EF.Tables;
 
 namespace BLL.Services
 {
-    public class Corporate_Service
+    public static class Corporate_Service
     {
-        public static List<Corporate_CustomerDTO> Get()
+        public static List<Corporate_CustomerDTO> GetCorp()
         {
             var data = DataFactory.CoporateData().Get(); //List<Course> ef model
 

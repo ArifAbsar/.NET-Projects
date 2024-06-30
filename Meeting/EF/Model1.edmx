@@ -1,0 +1,274 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="M_ModuleModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Corporate_Customer_Tbl">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="Individual_Customer_Tbl">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="Meeting_Minutes_Details_Tbl">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MeetingMinutesMasterId" Type="int" />
+          <Property Name="ProductServiceId" Type="int" />
+          <Property Name="Quantity" Type="int" />
+          <Property Name="Unit" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Meeting_Minutes_Master_Tbl">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CustomerId" Type="int" />
+          <Property Name="CustomerType" Type="nvarchar" MaxLength="50" />
+          <Property Name="Date" Type="datetime" />
+          <Property Name="MeetingPlace" Type="nvarchar" MaxLength="100" />
+          <Property Name="AttendsFromClientSide" Type="nvarchar" MaxLength="100" />
+          <Property Name="AttendsFromHostSide" Type="nvarchar" MaxLength="100" />
+          <Property Name="MeetingAgenda" Type="nvarchar(max)" />
+          <Property Name="MeetingDiscussion" Type="nvarchar(max)" />
+          <Property Name="MeetingDecision" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="Products_Service_Tbl">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProductServiceName" Type="nvarchar" MaxLength="100" />
+          <Property Name="Unit" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <Association Name="FK__Meeting_M__Meeti__3F466844">
+          <End Role="Meeting_Minutes_Master_Tbl" Type="Self.Meeting_Minutes_Master_Tbl" Multiplicity="0..1" />
+          <End Role="Meeting_Minutes_Details_Tbl" Type="Self.Meeting_Minutes_Details_Tbl" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Meeting_Minutes_Master_Tbl">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Meeting_Minutes_Details_Tbl">
+              <PropertyRef Name="MeetingMinutesMasterId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="Meeting_Minutes_Details_Save_SP" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="MeetingMinutesMasterId" Type="int" Mode="In" />
+          <Parameter Name="ProductServiceId" Type="int" Mode="In" />
+          <Parameter Name="Quantity" Type="int" Mode="In" />
+          <Parameter Name="Unit" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="Meeting_Minutes_Master_Save_SP" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CustomerId" Type="int" Mode="In" />
+          <Parameter Name="CustomerType" Type="nvarchar" Mode="In" />
+          <Parameter Name="Date" Type="datetime" Mode="In" />
+          <Parameter Name="MeetingPlace" Type="nvarchar" Mode="In" />
+          <Parameter Name="AttendsFromClientSide" Type="nvarchar" Mode="In" />
+          <Parameter Name="AttendsFromHostSide" Type="nvarchar" Mode="In" />
+          <Parameter Name="MeetingAgenda" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="MeetingDiscussion" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="MeetingDecision" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="Id" Type="int" Mode="InOut" />
+        </Function>
+        <EntityContainer Name="M_ModuleModelStoreContainer">
+          <EntitySet Name="Corporate_Customer_Tbl" EntityType="Self.Corporate_Customer_Tbl" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Individual_Customer_Tbl" EntityType="Self.Individual_Customer_Tbl" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Meeting_Minutes_Details_Tbl" EntityType="Self.Meeting_Minutes_Details_Tbl" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Meeting_Minutes_Master_Tbl" EntityType="Self.Meeting_Minutes_Master_Tbl" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Products_Service_Tbl" EntityType="Self.Products_Service_Tbl" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Meeting_M__Meeti__3F466844" Association="Self.FK__Meeting_M__Meeti__3F466844">
+            <End Role="Meeting_Minutes_Master_Tbl" EntitySet="Meeting_Minutes_Master_Tbl" />
+            <End Role="Meeting_Minutes_Details_Tbl" EntitySet="Meeting_Minutes_Details_Tbl" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="M_ModuleModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Corporate_Customer_Tbl">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Individual_Customer_Tbl">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Meeting_Minutes_Details_Tbl">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MeetingMinutesMasterId" Type="Int32" />
+          <Property Name="ProductServiceId" Type="Int32" />
+          <Property Name="Quantity" Type="Int32" />
+          <Property Name="Unit" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Meeting_Minutes_Master_Tbl" Relationship="Self.FK__Meeting_M__Meeti__3F466844" FromRole="Meeting_Minutes_Details_Tbl" ToRole="Meeting_Minutes_Master_Tbl" />
+        </EntityType>
+        <EntityType Name="Meeting_Minutes_Master_Tbl">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CustomerId" Type="Int32" />
+          <Property Name="CustomerType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Date" Type="DateTime" Precision="3" />
+          <Property Name="MeetingPlace" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="AttendsFromClientSide" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="AttendsFromHostSide" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="MeetingAgenda" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="MeetingDiscussion" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="MeetingDecision" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Meeting_Minutes_Details_Tbl" Relationship="Self.FK__Meeting_M__Meeti__3F466844" FromRole="Meeting_Minutes_Master_Tbl" ToRole="Meeting_Minutes_Details_Tbl" />
+        </EntityType>
+        <EntityType Name="Products_Service_Tbl">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProductServiceName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Unit" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <Association Name="FK__Meeting_M__Meeti__3F466844">
+          <End Role="Meeting_Minutes_Master_Tbl" Type="Self.Meeting_Minutes_Master_Tbl" Multiplicity="0..1" />
+          <End Role="Meeting_Minutes_Details_Tbl" Type="Self.Meeting_Minutes_Details_Tbl" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Meeting_Minutes_Master_Tbl">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Meeting_Minutes_Details_Tbl">
+              <PropertyRef Name="MeetingMinutesMasterId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="M_ModuleEntities1" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Corporate_Customer_Tbl" EntityType="Self.Corporate_Customer_Tbl" />
+          <EntitySet Name="Individual_Customer_Tbl" EntityType="Self.Individual_Customer_Tbl" />
+          <EntitySet Name="Meeting_Minutes_Details_Tbl" EntityType="Self.Meeting_Minutes_Details_Tbl" />
+          <EntitySet Name="Meeting_Minutes_Master_Tbl" EntityType="Self.Meeting_Minutes_Master_Tbl" />
+          <EntitySet Name="Products_Service_Tbl" EntityType="Self.Products_Service_Tbl" />
+          <AssociationSet Name="FK__Meeting_M__Meeti__3F466844" Association="Self.FK__Meeting_M__Meeti__3F466844">
+            <End Role="Meeting_Minutes_Master_Tbl" EntitySet="Meeting_Minutes_Master_Tbl" />
+            <End Role="Meeting_Minutes_Details_Tbl" EntitySet="Meeting_Minutes_Details_Tbl" />
+          </AssociationSet>
+          <FunctionImport Name="Meeting_Minutes_Details_Save_SP">
+            <Parameter Name="MeetingMinutesMasterId" Mode="In" Type="Int32" />
+            <Parameter Name="ProductServiceId" Mode="In" Type="Int32" />
+            <Parameter Name="Quantity" Mode="In" Type="Int32" />
+            <Parameter Name="Unit" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="Meeting_Minutes_Master_Save_SP">
+            <Parameter Name="CustomerId" Mode="In" Type="Int32" />
+            <Parameter Name="CustomerType" Mode="In" Type="String" />
+            <Parameter Name="Date" Mode="In" Type="DateTime" />
+            <Parameter Name="MeetingPlace" Mode="In" Type="String" />
+            <Parameter Name="AttendsFromClientSide" Mode="In" Type="String" />
+            <Parameter Name="AttendsFromHostSide" Mode="In" Type="String" />
+            <Parameter Name="MeetingAgenda" Mode="In" Type="String" />
+            <Parameter Name="MeetingDiscussion" Mode="In" Type="String" />
+            <Parameter Name="MeetingDecision" Mode="In" Type="String" />
+            <Parameter Name="Id" Mode="InOut" Type="Int32" />
+          </FunctionImport>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="M_ModuleModelStoreContainer" CdmEntityContainer="M_ModuleEntities1">
+          <EntitySetMapping Name="Corporate_Customer_Tbl">
+            <EntityTypeMapping TypeName="M_ModuleModel.Corporate_Customer_Tbl">
+              <MappingFragment StoreEntitySet="Corporate_Customer_Tbl">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Individual_Customer_Tbl">
+            <EntityTypeMapping TypeName="M_ModuleModel.Individual_Customer_Tbl">
+              <MappingFragment StoreEntitySet="Individual_Customer_Tbl">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Meeting_Minutes_Details_Tbl">
+            <EntityTypeMapping TypeName="M_ModuleModel.Meeting_Minutes_Details_Tbl">
+              <MappingFragment StoreEntitySet="Meeting_Minutes_Details_Tbl">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="MeetingMinutesMasterId" ColumnName="MeetingMinutesMasterId" />
+                <ScalarProperty Name="ProductServiceId" ColumnName="ProductServiceId" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="Unit" ColumnName="Unit" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Meeting_Minutes_Master_Tbl">
+            <EntityTypeMapping TypeName="M_ModuleModel.Meeting_Minutes_Master_Tbl">
+              <MappingFragment StoreEntitySet="Meeting_Minutes_Master_Tbl">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+                <ScalarProperty Name="CustomerType" ColumnName="CustomerType" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="MeetingPlace" ColumnName="MeetingPlace" />
+                <ScalarProperty Name="AttendsFromClientSide" ColumnName="AttendsFromClientSide" />
+                <ScalarProperty Name="AttendsFromHostSide" ColumnName="AttendsFromHostSide" />
+                <ScalarProperty Name="MeetingAgenda" ColumnName="MeetingAgenda" />
+                <ScalarProperty Name="MeetingDiscussion" ColumnName="MeetingDiscussion" />
+                <ScalarProperty Name="MeetingDecision" ColumnName="MeetingDecision" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Products_Service_Tbl">
+            <EntityTypeMapping TypeName="M_ModuleModel.Products_Service_Tbl">
+              <MappingFragment StoreEntitySet="Products_Service_Tbl">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="ProductServiceName" ColumnName="ProductServiceName" />
+                <ScalarProperty Name="Unit" ColumnName="Unit" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="Meeting_Minutes_Details_Save_SP" FunctionName="M_ModuleModel.Store.Meeting_Minutes_Details_Save_SP" />
+          <FunctionImportMapping FunctionImportName="Meeting_Minutes_Master_Save_SP" FunctionName="M_ModuleModel.Store.Meeting_Minutes_Master_Save_SP" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

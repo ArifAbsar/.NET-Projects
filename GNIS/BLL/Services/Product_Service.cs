@@ -12,9 +12,9 @@ namespace BLL.Services
 {
     public class Product_Service
     {
-        public static List<Product_ServiceDTO> Get()
+        public static List<Product_ServiceDTO> GetProd()
         {
-            var data = DataFactory.CoporateData().Get(); //List<Course> ef model
+            var data = DataFactory.ProdData().Get(); //List<Course> ef model
 
             //mapper
             var config = new MapperConfiguration(cfg => {

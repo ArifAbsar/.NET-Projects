@@ -12,13 +12,13 @@ namespace BLL.Services
 {
     public class Individual_Service
     {
-        public static List<Individual_CustomerDTO> Get()
+        public static List<Individual_CustomerDTO> GetIndi()
         {
-            var data = DataFactory.CoporateData().Get(); //List<Course> ef model
+            var data = DataFactory.IndividualData().Get(); //List<Course> ef model
 
             //mapper
             var config = new MapperConfiguration(cfg => {
-                cfg.CreateMap<individual_customer_tbl, Individual_CustomerDTO>();
+                cfg.CreateMap<Individual_customer_tbl, Individual_CustomerDTO>();
             });
             var mapper = new Mapper(config);
             var retdata = mapper.Map<List<Individual_CustomerDTO>>(data);

@@ -1,0 +1,86 @@
+﻿
+@model Meeting.Models.MeetingMinutesViewModel
+
+@{
+    ViewBag.Title = "Create Meeting Minutes";
+}
+
+<h2>Create Meeting Minutes</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Meeting Minutes</h4>
+        <hr />
+
+        @* First Part *@
+        <div class="form-group">
+            @Html.LabelFor(model => model.Master.CustomerId, "Customer Name", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Master.CustomerId, new SelectList(Model.CorporateCustomers, "Id", "Name"), "Select Customer", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Master.CustomerId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @* Other form fields *@
+
+        @* Second Part *@
+        <div class="form-group">
+            @Html.Label("Select Product/Service", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.DropDownList("ProductServiceId", new SelectList(Model.ProductServices, "Id", "ProductServiceName"), "Select Product/Service", new { @class = "form-control" })
+            </div>
+            <div class="col-md-2">
+                @Html.TextBox("Quantity", null, new { @class = "form-control", type = "number" })
+            </div>
+            <div class="col-md-2">
+                @Html.TextBox("Unit", null, new { @class = "form-control", @readonly = "readonly" })
+            </div>
+            <div class="col-md-2">
+                <button type="button" class="btn btn-default" onclick="addProduct()">Add</button>
+            </div>
+        </div>
+
+        @* Bootstrap table *@
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Product/Service</th>
+                    <th>Quantity</th>
+                    <th>Unit</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="productTableBody">
+                @* Rows will be added here *@
+            </tbody>
+        </table>
+
+        @* Save button *@
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <script type="text/javascript">
+        function addProduct() {
+            var productId = $("#ProductServiceId").val();
+            var productName = $("#ProductServiceId option:selected").text();
+            var quantity = $("#Quantity").val();
+            var unit = $("#Unit").val();
+
+            var newRow = "<tr><td>" + productName + "</td><td>" + quantity + "</td><td>" + unit + "</td><td><button type='button' onclick='removeProduct(this)'>Remove</button></td></tr>";
+            $("#productTableBody").append(newRow);
+        }
+
+        function removeProduct(button) {
+            $(button).closest("tr").remove();
+        }
+    </script>
+}

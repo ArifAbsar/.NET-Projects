@@ -9,6 +9,6 @@ namespace BLL.DTO
     public class Individual_CustomerDTO
     {
         public int Id { get; set; }
-        public string Individual_Customer_Name { get; set; }
+        public string Customer_Name { get; set; }
     }
 }

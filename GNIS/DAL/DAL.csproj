@@ -63,9 +63,13 @@
     <Compile Include="Migrations\202406300406390_initdb.Designer.cs">
       <DependentUpon>202406300406390_initdb.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202406300600057_getpro.cs" />
-    <Compile Include="Migrations\202406300600057_getpro.Designer.cs">
-      <DependentUpon>202406300600057_getpro.cs</DependentUpon>
+    <Compile Include="Migrations\202406301448323_initprod.cs" />
+    <Compile Include="Migrations\202406301448323_initprod.Designer.cs">
+      <DependentUpon>202406301448323_initprod.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202406301731098_what.cs" />
+    <Compile Include="Migrations\202406301731098_what.Designer.cs">
+      <DependentUpon>202406301731098_what.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -82,8 +86,11 @@
     <EmbeddedResource Include="Migrations\202406300406390_initdb.resx">
       <DependentUpon>202406300406390_initdb.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202406300600057_getpro.resx">
-      <DependentUpon>202406300600057_getpro.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202406301448323_initprod.resx">
+      <DependentUpon>202406301448323_initprod.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202406301731098_what.resx">
+      <DependentUpon>202406301731098_what.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />

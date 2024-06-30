@@ -1,4 +1,5 @@
-﻿using DAL.EF.Tables;
+﻿using DAL.EF;
+using DAL.EF.Tables;
 using DAL.Interface;
 using System;
 using System.Collections.Generic;
@@ -8,9 +9,10 @@ using System.Threading.Tasks;
 
 namespace DAL.Repo
 {
-    internal class IndividualRepo : Repo, IRepo<individual_customer_tbl, int>
+    internal class IndividualRepo : Repo, IRepo<Individual_customer_tbl, int>
     {
-        public void Create(individual_customer_tbl obj)
+        private readonly MeetingContext dab = new MeetingContext();
+        public void Create(Individual_customer_tbl obj)
         {
             throw new NotImplementedException();
         }
@@ -20,17 +22,17 @@ namespace DAL.Repo
             throw new NotImplementedException();
         }
 
-        public List<individual_customer_tbl> Get()
+        public List<Individual_customer_tbl> Get()
         {
-            return db.Individuals.ToList();
+            return dab.Individuals.ToList();
         }
 
-        public individual_customer_tbl Get(int id)
+        public Individual_customer_tbl Get(int id)
         {
             throw new NotImplementedException();
         }
 
-        public void Update(individual_customer_tbl obj)
+        public void Update(Individual_customer_tbl obj)
         {
             throw new NotImplementedException();
         }

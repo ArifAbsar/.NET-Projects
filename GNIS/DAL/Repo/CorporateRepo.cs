@@ -1,4 +1,5 @@
-﻿using DAL.EF.Tables;
+﻿using DAL.EF;
+using DAL.EF.Tables;
 using DAL.Interface;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ namespace DAL.Repo
 {
     internal class CorporateRepo : Repo, IRepo<Corporate_customer_tbl, int>
     {
+        private readonly MeetingContext dab = new MeetingContext();
         public void Create(Corporate_customer_tbl obj)
         {
             throw new NotImplementedException();
@@ -22,7 +24,7 @@ namespace DAL.Repo
 
         public List<Corporate_customer_tbl> Get()
         {
-            return db.Corporates.ToList();
+            return dab.Corporates.ToList();
         }
 
         public Corporate_customer_tbl Get(int id)

@@ -16,7 +16,7 @@ namespace DAL
         {
             return new CorporateRepo();
         }
-        public static IRepo<individual_customer_tbl, int> IndividualData()
+        public static IRepo<Individual_customer_tbl, int> IndividualData()
         {
             return new IndividualRepo();
         }

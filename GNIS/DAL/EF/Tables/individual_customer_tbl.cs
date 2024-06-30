@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace DAL.EF.Tables
 {
-    public class individual_customer_tbl
+    public class Individual_customer_tbl
     {
         public int Id { get; set; }
-        public string Individual_Customer_Name { get; set; }
+        public string Customer_Name { get; set; }
     }
 }

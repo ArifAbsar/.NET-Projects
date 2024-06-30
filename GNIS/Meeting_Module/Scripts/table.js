@@ -10,21 +10,27 @@
     function loadCustomerNames(type) {
         let url = (type === 'Corporate') ? '/Home/GetCorporateCustomers' : '/Home/GetIndividualCustomers';
         $.get(url, function (data) {
-            let options = '';
+            console.log('Customer Data:', data); // Debugging log
+            let options = '<option value="">Select Customer</option>';
             data.forEach(function (customer) {
-                options += `<option value="${customer.Id}">${customer.Name}</option>`;
+                options += `<option value="${customer.Id}">${customer.Corporate_Customer_Name}</option>`;
             });
             $('#customerName').html(options);
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            console.error("Error fetching data: ", textStatus, errorThrown);
         });
     }
 
     function loadProductServices() {
         $.get('/Home/GetProductServices', function (data) {
-            let options = '';
+            console.log('Product Services Data:', data); // Debugging log
+            let options = '<option value="">Select Product/Service</option>';
             data.forEach(function (productService) {
                 options += `<option value="${productService.Id}" data-unit="${productService.Unit}">${productService.Name}</option>`;
             });
             $('#productService').html(options);
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            console.error("Error fetching data: ", textStatus, errorThrown);
         });
 
         $('#productService').change(function () {
@@ -79,7 +85,7 @@
         });
 
         $.ajax({
-            url: '/Home/SaveMeetingMinutes',
+            url: '/Home/SaveMeetingMinutes', // Ensure you have this action defined in the controller
             type: 'POST',
             data: JSON.stringify(meetingData),
             contentType: 'application/json',
