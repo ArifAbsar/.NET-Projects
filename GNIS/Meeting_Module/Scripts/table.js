@@ -4,21 +4,11 @@
         loadCustomerNames($(this).val());
     });
 
-    // Load Products/Services
-    loadProductServices();
-
-    // Add Product/Service to table
-    $('#addProductService').click(function () {
-        addProductService();
-    });
-
-    // Save Meeting Minutes
-    $('#saveMeetingMinutes').click(function () {
-        saveMeetingMinutes();
-    });
+    // Initially load corporate customer names since it's checked by default
+    loadCustomerNames('Corporate');
 
     function loadCustomerNames(type) {
-        let url = (type === 'Corporate') ? '/Customers/GetCorporateCustomers' : '/Customers/GetIndividualCustomers';
+        let url = (type === 'Corporate') ? '/Home/GetCorporateCustomers' : '/Home/GetIndividualCustomers';
         $.get(url, function (data) {
             let options = '';
             data.forEach(function (customer) {
@@ -29,7 +19,7 @@
     }
 
     function loadProductServices() {
-        $.get('/ProductServices/GetProductServices', function (data) {
+        $.get('/Home/GetProductServices', function (data) {
             let options = '';
             data.forEach(function (productService) {
                 options += `<option value="${productService.Id}" data-unit="${productService.Unit}">${productService.Name}</option>`;
@@ -42,6 +32,9 @@
             $('#unit').val(unit);
         });
     }
+
+    // Load Products/Services on document ready
+    loadProductServices();
 
     function addProductService() {
         let productServiceId = $('#productService').val();
@@ -86,7 +79,7 @@
         });
 
         $.ajax({
-            url: '/MeetingMinutes/SaveMeetingMinutes',
+            url: '/Home/SaveMeetingMinutes',
             type: 'POST',
             data: JSON.stringify(meetingData),
             contentType: 'application/json',
@@ -98,4 +91,14 @@
             }
         });
     }
+
+    // Bind the add button click event
+    $('#addProductService').click(function () {
+        addProductService();
+    });
+
+    // Bind the save button click event
+    $('#saveMeetingMinutes').click(function () {
+        saveMeetingMinutes();
+    });
 });
