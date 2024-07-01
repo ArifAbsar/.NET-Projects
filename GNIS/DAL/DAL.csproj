@@ -59,17 +59,29 @@
     <Compile Include="EF\Tables\Meeting_Minutes_Master_tbl.cs" />
     <Compile Include="EF\Tables\Product_Service_tbl.cs" />
     <Compile Include="Interface\IRepo.cs" />
-    <Compile Include="Migrations\202406300406390_initdb.cs" />
-    <Compile Include="Migrations\202406300406390_initdb.Designer.cs">
-      <DependentUpon>202406300406390_initdb.cs</DependentUpon>
+    <Compile Include="Migrations\202407010308171_helllllppppp.cs" />
+    <Compile Include="Migrations\202407010308171_helllllppppp.Designer.cs">
+      <DependentUpon>202407010308171_helllllppppp.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202406301448323_initprod.cs" />
-    <Compile Include="Migrations\202406301448323_initprod.Designer.cs">
-      <DependentUpon>202406301448323_initprod.cs</DependentUpon>
+    <Compile Include="Migrations\202407010337002_prodcol.cs" />
+    <Compile Include="Migrations\202407010337002_prodcol.Designer.cs">
+      <DependentUpon>202407010337002_prodcol.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202406301731098_what.cs" />
-    <Compile Include="Migrations\202406301731098_what.Designer.cs">
-      <DependentUpon>202406301731098_what.cs</DependentUpon>
+    <Compile Include="Migrations\202407010540266_changeprod.cs" />
+    <Compile Include="Migrations\202407010540266_changeprod.Designer.cs">
+      <DependentUpon>202407010540266_changeprod.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202407010626099_del.cs" />
+    <Compile Include="Migrations\202407010626099_del.Designer.cs">
+      <DependentUpon>202407010626099_del.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202407010900418_changes.cs" />
+    <Compile Include="Migrations\202407010900418_changes.Designer.cs">
+      <DependentUpon>202407010900418_changes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202407011010529_change.cs" />
+    <Compile Include="Migrations\202407011010529_change.Designer.cs">
+      <DependentUpon>202407011010529_change.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -83,17 +95,25 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202406300406390_initdb.resx">
-      <DependentUpon>202406300406390_initdb.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202407010308171_helllllppppp.resx">
+      <DependentUpon>202407010308171_helllllppppp.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202406301448323_initprod.resx">
-      <DependentUpon>202406301448323_initprod.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202407010337002_prodcol.resx">
+      <DependentUpon>202407010337002_prodcol.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202406301731098_what.resx">
-      <DependentUpon>202406301731098_what.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202407010540266_changeprod.resx">
+      <DependentUpon>202407010540266_changeprod.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202407010626099_del.resx">
+      <DependentUpon>202407010626099_del.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202407010900418_changes.resx">
+      <DependentUpon>202407010900418_changes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202407011010529_change.resx">
+      <DependentUpon>202407011010529_change.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

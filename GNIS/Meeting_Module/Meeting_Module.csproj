@@ -171,7 +171,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
-    <Content Include="Scripts\table.js" />
+    <Content Include="Scripts\meetingMinutes.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -220,6 +220,10 @@
     <ProjectReference Include="..\BLL\BLL.csproj">
       <Project>{0647ed57-7a47-4f1b-96c5-9353b0497c43}</Project>
       <Name>BLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DAL\DAL.csproj">
+      <Project>{B4B59BCB-A935-4BDB-B5AF-11AC47283A6E}</Project>
+      <Name>DAL</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

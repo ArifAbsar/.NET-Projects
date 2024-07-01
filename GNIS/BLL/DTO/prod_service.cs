@@ -4,14 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DAL.EF.Tables
+namespace BLL.DTO
 {
-    public class Meeting_Minutes_Details_tbl
+    internal class prod_service
     {
         public int Id { get; set; }
-        public int ProductServiceId { get; set; }
         public int Quantity { get; set; }
-        public string Unit { get; set; }
-       
+        public string unit { get; set; }
     }
 }

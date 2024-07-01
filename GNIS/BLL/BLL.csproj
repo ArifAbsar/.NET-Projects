@@ -44,7 +44,9 @@
       <HintPath>..\Meeting_Module\packages\EntityFramework.6.5.1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Activities" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -56,12 +58,15 @@
   <ItemGroup>
     <Compile Include="DTO\Corporate_CustomerDTO.cs" />
     <Compile Include="DTO\Individual_CustomerDTO.cs" />
+    <Compile Include="DTO\Meeting_Minutes_DetailsDTO.cs" />
+    <Compile Include="DTO\Meeting_Minutes_MasterDTO.cs" />
     <Compile Include="DTO\Product_ServiceDTO.cs" />
+    <Compile Include="DTO\prod_service.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Corporate_Service.cs" />
     <Compile Include="Services\Individual_Service.cs" />
     <Compile Include="Services\Meetings_Minutes_Details_Services.cs" />
-    <Compile Include="Services\Meeting_Minutes_Master_Services.cs" />
+    <Compile Include="Services\Meetings_Minutes_Master.cs" />
     <Compile Include="Services\Product_Service.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,12 +1,13 @@
-﻿using System;
+﻿using DAL.EF.Tables;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DAL.EF.Tables
+namespace BLL.DTO
 {
-    public class Meeting_Minutes_Master_tbl
+    public class Meeting_Minutes_MasterDTO
     {
         public int Id { get; set; }
         public string CustomerType { get; set; }

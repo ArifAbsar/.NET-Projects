@@ -10,5 +10,7 @@ namespace BLL.DTO
     {
         public int id { get; set; }
         public string Prod_Name { get; set; }
+        public int Quantity { get; set; }
+        public string unit { get; set; }
     }
 }
