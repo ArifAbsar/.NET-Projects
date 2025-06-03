@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Mini_Accounting_Management_System.db;
+using Microsoft.AspNetCore.Identity;
+using Mini_Accounting_Management_System.Models;
 
 namespace Mini_Accounting_Management_System
 {
@@ -16,6 +18,8 @@ namespace Mini_Accounting_Management_System
                 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
                 option.UseSqlServer(connectionString);
             });
+
+            builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount =false).AddEntityFrameworkStores<AppDbContext>();
 
             var app = builder.Build();
 
