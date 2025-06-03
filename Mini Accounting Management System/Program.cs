@@ -2,6 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using Mini_Accounting_Management_System.db;
 using Microsoft.AspNetCore.Identity;
 using Mini_Accounting_Management_System.Models;
+using Microsoft.Extensions.Options;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Mini_Accounting_Management_System
 {
@@ -12,7 +14,8 @@ namespace Mini_Accounting_Management_System
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            builder.Services.AddRazorPages();
+            
+
             builder.Services.AddDbContext<AppDbContext>(option =>
             {
                 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
