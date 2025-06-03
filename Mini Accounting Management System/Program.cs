@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using Mini_Accounting_Management_System.db;
+
 namespace Mini_Accounting_Management_System
 {
     public class Program
@@ -8,6 +11,11 @@ namespace Mini_Accounting_Management_System
 
             // Add services to the container.
             builder.Services.AddRazorPages();
+            builder.Services.AddDbContext<AppDbContext>(option =>
+            {
+                var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+                option.UseSqlServer(connectionString);
+            });
 
             var app = builder.Build();
 
