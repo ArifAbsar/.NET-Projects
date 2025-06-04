@@ -1,5 +1,10 @@
 ﻿@page
 @model IndexModel
+@using Microsoft.AspNetCore.Identity
+@using Mini_Accounting_Management_System.Models
+
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
 @{
     ViewData["Title"] = "Home page";
 }
@@ -7,4 +12,61 @@
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
 </div>
+@if (User.Identity?.IsAuthenticated==true) {
+    <div class="container my-5">
+        <!-- Centered page heading -->
+        <div class="text-center mb-4">
+            <h2 class="fw-bold">Account Listing</h2>
+            <p class="text-muted">Below is the complete list of all accounts and their current balances.</p>
+        </div>
+
+        <!-- Responsive table wrapper -->
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped table-hover">
+                <!-- Optional table caption -->
+                <caption class="text-center fw-semibold mb-3">Chart of Accounts</caption>
+
+                <thead class="table-light">
+                    <tr>
+                        <th scope="col" class="text-center">ID</th>
+                        <th scope="col" class="text-center">Account Type</th>
+                        <th scope="col" class="text-center">Account</th>
+                        <th scope="col" class="text-center">Balance</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <!-- Example rows; replace with your dynamic data -->
+                    <tr>
+                        <td class="text-center">1000</td>
+                        <td>Asset</td>
+                        <td>Cash</td>
+                        <td class="text-end">$12,350.75</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">1001</td>
+                        <td>Asset</td>
+                        <td>Accounts Receivable</td>
+                        <td class="text-end">$8,925.00</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">2000</td>
+                        <td>Liability</td>
+                        <td>Accounts Payable</td>
+                        <td class="text-end">$4,200.00</td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">3000</td>
+                        <td>Equity</td>
+                        <td>Owner’s Equity</td>
+                        <td class="text-end">$16,075.75</td>
+                    </tr>
+                    <!-- …additional rows… -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+

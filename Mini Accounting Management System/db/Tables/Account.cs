@@ -6,8 +6,8 @@ namespace Mini_Accounting_Management_System.db.Tables
     {
         [Key]
         public int P_ID { get; set; }
-        public string? Acc_Type { get; set; }
-        public string? Sub_Acc { get; set; }
+        public required string Acc_Type { get; set; }
+        public required string Sub_Acc { get; set; }
         public Decimal Balance { get; set; } = 0;
     }
 }
