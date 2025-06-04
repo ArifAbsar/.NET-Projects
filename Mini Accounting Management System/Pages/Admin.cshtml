@@ -1,0 +1,16 @@
+﻿@page
+@model Mini_Accounting_Management_System.Pages.AdminModel
+@{
+}
+<h2>Admin Control Panel</h2>
+
+<div>
+    <p>Welcome @Model.appUser?.Name to the Admin Control Panel. Here you can manage users, view reports, and configure system settings.</p>
+
+    <h3>Manage Users</h3>
+    <p><a asp-area="Identity" asp-page="/Account/Users">View and manage user accounts</a></p>
+    <h3>Reports</h3>
+    <p><a asp-page="/Reports/Index">View system reports</a></p>
+    <h3>Settings</h3>
+    <p><a asp-page="/Settings/Index">Configure system settings</a></p>
+</div>

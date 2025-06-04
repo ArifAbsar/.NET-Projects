@@ -22,7 +22,9 @@ namespace Mini_Accounting_Management_System
                 option.UseSqlServer(connectionString);
             });
 
-            builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount =false).AddEntityFrameworkStores<AppDbContext>();
+            builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount =false)
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<AppDbContext>();
 
             var app = builder.Build();
 
