@@ -1,5 +1,5 @@
 ﻿@page
-@model IndexModel
+@model Mini_Accounting_Management_System.Pages.IndexModel
 @using Microsoft.AspNetCore.Identity
 @using Mini_Accounting_Management_System.Models
 
@@ -16,57 +16,104 @@
 </div>
 @if (User.Identity?.IsAuthenticated==true) {
     <div class="container my-5">
-        <!-- Centered page heading -->
         <div class="text-center mb-4">
-            <h2 class="fw-bold">Account Listing</h2>
-            <p class="text-muted">Below is the complete list of all accounts and their current balances.</p>
+            <h2 class="fw-bold">Chart of Accounts</h2>
+            <p class="text-muted">Click any account type to view its sub-accounts.</p>
         </div>
 
-        <!-- Responsive table wrapper -->
-        <div class="table-responsive">
-            <table class="table table-bordered table-striped table-hover">
-                <!-- Optional table caption -->
-                <caption class="text-center fw-semibold mb-3">Chart of Accounts</caption>
-
-                <thead class="table-light">
-                    <tr>
-                        <th scope="col" class="text-center">ID</th>
-                        <th scope="col" class="text-center">Account Type</th>
-                        <th scope="col" class="text-center">Account</th>
-                        <th scope="col" class="text-center">Balance</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    <!-- Example rows; replace with your dynamic data -->
-                    <tr>
-                        <td class="text-center">1000</td>
-                        <td>Asset</td>
-                        <td>Cash</td>
-                        <td class="text-end">$12,350.75</td>
-                    </tr>
-                    <tr>
-                        <td class="text-center">1001</td>
-                        <td>Asset</td>
-                        <td>Accounts Receivable</td>
-                        <td class="text-end">$8,925.00</td>
-                    </tr>
-                    <tr>
-                        <td class="text-center">2000</td>
-                        <td>Liability</td>
-                        <td>Accounts Payable</td>
-                        <td class="text-end">$4,200.00</td>
-                    </tr>
-                    <tr>
-                        <td class="text-center">3000</td>
-                        <td>Equity</td>
-                        <td>Owner’s Equity</td>
-                        <td class="text-end">$16,075.75</td>
-                    </tr>
-                    <!-- …additional rows… -->
-                </tbody>
-            </table>
+        <!-- 1) Account Types Table -->
+        <div class="card mb-5">
+            <div class="card-header bg-dark text-white"><strong>Account Types</strong></div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-striped mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th class="text-center">#</th>
+                                <th>Account Type</th>
+                                <th class="text-center">Total Balance</th>
+                                <th class="text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.AccountTypes.Count == 0)
+                            {
+                                <tr>
+                                    <td colspan="4" class="text-center text-muted py-3">
+                                        No account types found.
+                                    </td>
+                                </tr>
+                            }
+                            else
+                            {
+                                var idx = 1;
+                                foreach (var acctType in Model.AccountTypes)
+                                {
+                                    <tr>
+                                        <td class="text-center">@idx</td>
+                                        <td>@acctType.Acc_Type</td>
+                                        <td class="text-end">@acctType.TotalBalance.ToString("C2")</td>
+                                        <td class="text-center">
+                                            <a class="btn btn-sm btn-primary"
+                                               asp-route-TypeFilter="@acctType.Acc_Type">
+                                                View
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    idx++;
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
+
+        <!-- 2) Sub-Accounts Table -->
+        @if (!string.IsNullOrWhiteSpace(Model.TypeFilter))
+        {
+            <div class="card">
+                <div class="card-header bg-secondary text-white d-flex justify-content-between">
+                    <span>Sub-Accounts for: <strong>@Model.TypeFilter</strong></span>
+                    <!-- Back button simply clears the query string by pointing to Index with no route -->
+                    <a asp-page="./Index" class="btn btn-sm btn-light">← Back to Types</a>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th class="text-center">P_ID</th>
+                                    <th>Sub-Account</th>
+                                    <th class="text-end">Balance</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.SubAccounts.Count == 0)
+                                {
+                                    <tr>
+                                        <td colspan="3" class="text-center text-muted py-3">
+                                            No sub-accounts found for “@Model.TypeFilter.”
+                                        </td>
+                                    </tr>
+                                }
+                                else
+                                {
+                                    foreach (var sub in Model.SubAccounts)
+                                    {
+                                        <tr>
+                                            <td class="text-center">@sub.P_ID</td>
+                                            <td>@sub.Sub_Acc</td>
+                                            <td class="text-end">@sub.Balance.ToString("C2")</td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        }
     </div>
 }
 
