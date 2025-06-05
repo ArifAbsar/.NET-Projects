@@ -14,7 +14,7 @@ namespace Mini_Accounting_Management_System.Helper
             using (var connection = new SqlConnection(connectionString))
             using (var command = new SqlCommand("dbo.sp_GetAccountTypes", connection))
             {
-                command.CommandType =CommandType.StoredProcedure;
+                command.CommandType = CommandType.StoredProcedure;
                 connection.Open();
                 using (var reader = command.ExecuteReader())
                 {
@@ -47,13 +47,13 @@ namespace Mini_Accounting_Management_System.Helper
                 {
                     while (reader.Read())
                     {
-                        result.Add( new SubAccountDTO
+                        result.Add(new SubAccountDTO
                         {
-                            P_ID = reader.GetInt32(reader.GetOrdinal("S_ID")),
+                            S_ID = reader.GetInt32(reader.GetOrdinal("S_ID")),
                             Sub_Acc = reader.GetString(reader.GetOrdinal("Sub_Acc")),
                             Balance = reader.GetDecimal(reader.GetOrdinal("Balance"))
                         });
-                        
+
                     }
                 }
             }
@@ -64,7 +64,7 @@ namespace Mini_Accounting_Management_System.Helper
         public static int InsertWholeAccount(string connection, string Type_acc)
         {
             int account = 0;
-            using(var conn=new SqlConnection(connection))
+            using (var conn = new SqlConnection(connection))
             using (var cmd = new SqlCommand("dbo.sp_ManageAccounts", conn))
             {
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -75,7 +75,7 @@ namespace Mini_Accounting_Management_System.Helper
                 object result = cmd.ExecuteScalar();
                 conn.Close();
 
-                if (result!=null && result!=DBNull.Value)
+                if (result != null && result != DBNull.Value)
                 {
                     account = Convert.ToInt32(result);
                 }
@@ -84,7 +84,7 @@ namespace Mini_Accounting_Management_System.Helper
             }
             return account;
         }
-        public static int InsertSubAccount(string connection, int Type_id, string Sub_acc_Name,decimal Balance)
+        public static int InsertSubAccount(string connection, int Type_id, string Sub_acc_Name, decimal Balance)
         {
             int flag = 0;
             using (var conn = new SqlConnection(connection))
@@ -106,6 +106,25 @@ namespace Mini_Accounting_Management_System.Helper
                 }
 
 
+            }
+            return flag;
+        }
+        public static int DeleteSubAccount(string connection, int sub_id)
+        {
+            int flag = 0;
+            using (var conn = new SqlConnection(connection))
+            using (var cmd = new SqlCommand("dbo.sp_ManageAccounts", conn))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add("@Action", SqlDbType.NVarChar, 20).Value = "DeleteSub";
+                cmd.Parameters.Add("@P_ID", SqlDbType.Int).Value = sub_id;
+                conn.Open();
+                object result = cmd.ExecuteScalar();
+                conn.Close();
+                if (result != null && result != DBNull.Value)
+                {
+                    flag = Convert.ToInt32(result);
+                }
             }
             return flag;
         }

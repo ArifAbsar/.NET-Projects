@@ -24,6 +24,8 @@ namespace Mini_Accounting_Management_System.Pages
         public string? NewSubAccName { get; set; }
         [BindProperty]
         public decimal NewSubBalance { get; set; }
+        [BindProperty]
+        public int Sub_id { get; set; }
         public void OnGet()
         {
             string connString = _config.GetConnectionString("DefaultConnection");
@@ -76,6 +78,16 @@ namespace Mini_Accounting_Management_System.Pages
 
             
             return RedirectToPage(new { TypeFilter });
+        }
+        public IActionResult OnPostDeleteSubAccount() 
+        { 
+            if(!TypeFilter.HasValue|| Sub_id <= 0)
+            {
+                return RedirectToPage(new { TypeFilter });
+            }
+            string connString = _config.GetConnectionString("DefaultConnection")!;
+            int del= AccountHelper.DeleteSubAccount(connString, Sub_id);
+            return RedirectToPage(new {TypeFilter});
         }
     }
 }

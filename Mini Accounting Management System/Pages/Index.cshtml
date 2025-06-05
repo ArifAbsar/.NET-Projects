@@ -212,10 +212,18 @@
                                             <td class="text-center">@sub.Sub_Acc</td>
                                             <td class="text-center">@sub.Balance.ToString("C2")</td>
                                             <td class="text-center">
-                                                <a class="btn btn-sm btn-primary"
-                                                   asp-route-TypeFilter="@sub.Sub_Acc">
-                                                    Delete
-                                                </a>
+
+                                                <!-- DELETE FORM -->
+                                                <form method="post" asp-page-handler="DeleteSubAccount" class="d-inline">
+                                                    <input type="hidden" name="TypeFilter" value="@Model.TypeFilter" />
+                                                    <!--sub_id deletion -->
+                                                    <input type="hidden" name="Sub_id" value="@sub.S_ID" />
+
+                                                    <button type="submit" class="btn btn-sm btn-danger">
+                                                        Delete
+                                                    </button>
+                                                </form>
+
                                             </td>
                                         </tr>
                                     }
