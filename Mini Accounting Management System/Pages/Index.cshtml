@@ -9,22 +9,56 @@
     ViewData["Title"] = "Home page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-
-</div>
 @if (User.Identity?.IsAuthenticated==true) {
     <div class="container my-5">
         <div class="text-center mb-4">
             <h2 class="fw-bold">Chart of Accounts</h2>
             <p class="text-muted">Click any account type to view its sub-accounts.</p>
         </div>
+        <!--If you press Add New button it will show form to add new Account type-->
+        <button id="showFormButton" class="btn btn-outline-dark mb-4">
+            Add New Account
+        </button>
+       
+        <div id="newAccountFormContainer" style="display: none;">
+        <h3>Create a New Account Type</h3>
+        <form method="post" asp-page-handler="WholeAccount">
+        <div class="mb-3">
+            <label asp-for="AccountTypeName" class="form-label">Account Type Name</label>
+            <input asp-for="AccountTypeName" class="form-control" />
+            <span asp-validation-for="AccountTypeName" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-primary">Save Type</button>
+        <button type="button" id="cancelFormButton" class="btn btn-secondary ms-2">
+            Cancel
+        </button>
+    </form>
+        <!--Script for to press the button and show the AccountType form-->
+            <script>
+                const showFormButton = document.getElementById('showFormButton');
+                const cancelFormButton = document.getElementById('cancelFormButton');
+                const newAccountFormContainer = document.getElementById('newAccountFormContainer');
 
-        <!-- 1) Account Types Table -->
+                //Show form and hide button
+                showFormButton.addEventListener('click', function () {
+                    newAccountFormContainer.style.display = 'block';
+                    showFormButton.style.display = 'none';
+                });
+
+                //hide form and show button again
+                cancelFormButton.addEventListener('click', function () {
+                    newAccountFormContainer.style.display = 'none';
+                    showFormButton.style.display = 'inline-block';
+                });
+            </script>
+    <hr class="my-4" />
+    </div>
+        <!-- Account Types Table -->
         <div class="card mb-5">
-            <div class="card-header bg-dark text-white"><strong>Account Types</strong></div>
+            
+            <div class="card-header bg-light text-black"><strong>Account Types</strong></div>
             <div class="card-body p-0">
+                
                 <div class="table-responsive">
                     <table class="table table-striped mb-0">
                         <thead class="table-light">
@@ -52,12 +86,20 @@
                                     <tr>
                                         <td class="text-center">@idx</td>
                                         <td>@acctType.Acc_Type</td>
-                                        <td class="text-end">@acctType.TotalBalance.ToString("C2")</td>
+                                        <td class="text-center">@acctType.TotalBalance.ToString("C2")</td>
                                         <td class="text-center">
-                                            <a class="btn btn-sm btn-primary"
-                                               asp-route-TypeFilter="@acctType.Acc_Type">
-                                                View
-                                            </a>
+                                            <form method="post" asp-page-handler="FilterByType">
+                                                <input type="hidden" name="TypeFilter" value="@acctType.A_ID" />
+                                                <button type="submit" class="btn btn-sm btn-primary">
+                                                    View
+                                                </button>
+                                                <button type="button"
+                                                        class="btn btn-sm btn-outline-dark ms-2 show-add-sub-button"
+                                                        data-typeid="@acctType.A_ID">
+                                                    Add
+                                                </button>
+                                            </form>
+                                            
                                         </td>
                                     </tr>
                                     idx++;
@@ -68,24 +110,89 @@
                 </div>
             </div>
         </div>
+        <div id="addSubAccountContainer" style="display: none; margin-bottom: 2rem;">
+            <h5>Add Sub-Account for: <span id="parentTypeLabel"></span></h5>
+            <form method="post" asp-page-handler="AddSubAccount">
+                <!--Hidden field so OnPostAddSubAccount knows which parent to use -->
+                <input type="hidden" name="TypeFilter" id="hiddenTypeFilter" value="" />
 
-        <!-- 2) Sub-Accounts Table -->
-        @if (!string.IsNullOrWhiteSpace(Model.TypeFilter))
+                <div class="row g-2 align-items-end">
+                    <!--Sub_Acc name -->
+                    <div class="col-md-5">
+                        <label asp-for="NewSubAccName" class="form-label">Sub-Account Name</label>
+                        <input asp-for="NewSubAccName" class="form-control" />
+                        <span asp-validation-for="NewSubAccName" class="text-danger"></span>
+                    </div>
+                    <!--Balance -->
+                    <div class="col-md-3">
+                        <label asp-for="NewSubBalance" class="form-label">Balance</label>
+                        <input asp-for="NewSubBalance" class="form-control" />
+                        <span asp-validation-for="NewSubBalance" class="text-danger"></span>
+                    </div>
+                    <!--Save and Cancel buttons -->
+                    <div class="col-md-4 d-flex">
+                        <button type="submit" class="btn btn-success me-2">Save Sub-Account</button>
+                        <button type="button" id="cancelAddSubButton" class="btn btn-secondary">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </form>
+            <hr class="my-4" />
+        </div>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+               
+                const addButtons = document.querySelectorAll('.show-add-sub-button');
+                const addSubContainer = document.getElementById('addSubAccountContainer');
+                const hiddenTypeFilterInput = document.getElementById('hiddenTypeFilter');
+                const parentTypeLabel = document.getElementById('parentTypeLabel');
+                const cancelAddSubBtn = document.getElementById('cancelAddSubButton');
+
+                addButtons.forEach(btn => {
+                    btn.addEventListener('click', function () {
+                        //Read the parent A_ID from data-typeid
+                        const parentId = this.getAttribute('data-typeid');
+
+                        
+                        hiddenTypeFilterInput.value = parentId;
+
+                        parentTypeLabel.textContent = parentId;
+
+                        //Show the form container and scroll into view
+                        addSubContainer.style.display = 'block';
+                        addSubContainer.scrollIntoView({ behavior: 'smooth' });
+
+                        //Clear any previous values from the form fields
+                        document.getElementById('NewSubAccName').value = '';
+                        document.getElementById('NewSubBalance').value = '';
+                    });
+                });
+
+                //Cancel hides the form
+                cancelAddSubBtn.addEventListener('click', function () {
+                    addSubContainer.style.display = 'none';
+                    hiddenTypeFilterInput.value = '';
+                });
+            });
+        </script>
+
+        <!--Sub-Accounts Table -->
+        @if (Model.TypeFilter.HasValue)
         {
             <div class="card">
                 <div class="card-header bg-secondary text-white d-flex justify-content-between">
                     <span>Sub-Accounts for: <strong>@Model.TypeFilter</strong></span>
-                    <!-- Back button simply clears the query string by pointing to Index with no route -->
-                    <a asp-page="./Index" class="btn btn-sm btn-light">← Back to Types</a>
+                    <a asp-page="./Index" class="btn btn-sm btn-light">Back to Types</a>
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
                         <table class="table table-bordered table-hover mb-0">
                             <thead class="table-light">
                                 <tr>
-                                    <th class="text-center">P_ID</th>
-                                    <th>Sub-Account</th>
-                                    <th class="text-end">Balance</th>
+                                    <th class="text-center">Sub-Account</th>
+                                    <th class="text-center">Balance</th>
+                                    <th class="text-center">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -102,9 +209,14 @@
                                     foreach (var sub in Model.SubAccounts)
                                     {
                                         <tr>
-                                            <td class="text-center">@sub.P_ID</td>
-                                            <td>@sub.Sub_Acc</td>
-                                            <td class="text-end">@sub.Balance.ToString("C2")</td>
+                                            <td class="text-center">@sub.Sub_Acc</td>
+                                            <td class="text-center">@sub.Balance.ToString("C2")</td>
+                                            <td class="text-center">
+                                                <a class="btn btn-sm btn-primary"
+                                                   asp-route-TypeFilter="@sub.Sub_Acc">
+                                                    Delete
+                                                </a>
+                                            </td>
                                         </tr>
                                     }
                                 }
@@ -113,7 +225,20 @@
                     </div>
                 </div>
             </div>
+            <script>
+                //this script removes ?query=value  from url like it will only https://localhost:4487 
+                if (window.history && window.history.replaceState) {
+                    window.history.replaceState(
+                      null,
+                      null,
+                      window.location.pathname
+                    );
+                }
+
+                
+            </script>
         }
     </div>
 }
+
 

@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Mini_Accounting_Management_System.db.Tables;
 using Mini_Accounting_Management_System.DTO;
 using Mini_Accounting_Management_System.Helper;
 
@@ -16,19 +17,65 @@ namespace Mini_Accounting_Management_System.Pages
         public List<AccountTypeDTO> AccountTypes { get; set; } = new();
         public List<SubAccountDTO> SubAccounts { get; set; } = new();
         [BindProperty(SupportsGet = true)]
-        public string? TypeFilter { get; set; }
+        public int? TypeFilter { get; set; }
+        [BindProperty]
+        public string? AccountTypeName { get; set; }
+        [BindProperty]
+        public string? NewSubAccName { get; set; }
+        [BindProperty]
+        public decimal NewSubBalance { get; set; }
         public void OnGet()
         {
             string connString = _config.GetConnectionString("DefaultConnection");
-
-            // 1) Always load distinct account types
             AccountTypes = AccountHelper.GetAccountType(connString);
 
-            // 2) If the user clicked a type (e.g. ?type=Asset), load sub-accounts
-            if (!string.IsNullOrWhiteSpace(TypeFilter))
+           
+            if (TypeFilter.HasValue)
             {
-                SubAccounts = AccountHelper.GetSubAccountsByType(connString, TypeFilter);
+                SubAccounts = AccountHelper.GetSubAccountsByType(connString, TypeFilter.Value);
             }
+        }
+        public IActionResult OnPostFilterByType(int? TypeFilter)
+        {
+            if (!TypeFilter.HasValue)
+            {
+                
+                return RedirectToPage();
+            }
+
+            
+            return RedirectToPage(new { TypeFilter = TypeFilter.Value });
+        }
+
+        public IActionResult OnpostWholeAccount()
+        {
+            string connString = _config.GetConnectionString("DefaultConnection");
+            if (string.IsNullOrEmpty(AccountTypeName))
+            {
+                return RedirectToPage();
+            }
+            int newType = AccountHelper.InsertWholeAccount(connString, AccountTypeName);
+            return RedirectToPage();
+        }
+        public IActionResult OnPostAddSubAccount()
+        {
+            
+            if (TypeFilter == null || string.IsNullOrWhiteSpace(NewSubAccName))
+            {
+                return RedirectToPage(new { TypeFilter });
+            }
+
+            
+            string connString = _config.GetConnectionString("DefaultConnection")!;
+            int newSubPId = AccountHelper.InsertSubAccount(
+                connString,
+                TypeFilter.Value,
+                NewSubAccName,
+                NewSubBalance
+            );
+
+            
+            return RedirectToPage(new { TypeFilter });
         }
     }
 }
