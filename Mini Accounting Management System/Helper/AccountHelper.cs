@@ -58,6 +58,34 @@ namespace Mini_Accounting_Management_System.Helper
                 }
             }
 
+
+            return result;
+        }
+        public static List<SubAccountDTO> GetSubAccounts(string connectionString)
+        {
+            var result = new List<SubAccountDTO>();
+
+            using (var conn = new SqlConnection(connectionString))
+            using (var cmd = new SqlCommand("dbo.sp_GetAllSub", conn))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                conn.Open();
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        result.Add(new SubAccountDTO
+                        {
+                            S_ID = reader.GetInt32(reader.GetOrdinal("S_ID")),
+                            Sub_Acc = reader.GetString(reader.GetOrdinal("Sub_Acc")),
+                        });
+
+                    }
+                }
+            }
+
+
             return result;
         }
 
@@ -128,5 +156,208 @@ namespace Mini_Accounting_Management_System.Helper
             }
             return flag;
         }
+        public static List<Journal_VDTO> GetJournalVouchers(string connectionString)
+        {
+            var list = new List<Journal_VDTO>();
+            using var conn = new SqlConnection(connectionString);
+            using var cmd = new SqlCommand("sp_GetJournalVoucher", conn)
+            {
+                CommandType = CommandType.StoredProcedure
+            };
+            conn.Open();
+            using var rdr = cmd.ExecuteReader();
+            while (rdr.Read())
+            {
+                list.Add(new Journal_VDTO
+                {
+                    J_ID = rdr.GetInt32(rdr.GetOrdinal("J_ID")),
+                    ReferenceNo = rdr.GetString(rdr.GetOrdinal("ReferenceNo")),
+                    SubAccountID = rdr.GetInt32(rdr.GetOrdinal("SubAccountID")),
+                    VoucherDate = rdr.GetDateTime(rdr.GetOrdinal("VoucherDate")),
+                    Debit = rdr.GetDecimal(rdr.GetOrdinal("Debit")),
+                    Credit = rdr.GetDecimal(rdr.GetOrdinal("Credit")),
+                });
+            }
+            return list;
+        }
+        public static List<Payment_VDTO> LoadPaymentVouchers(string connectionString)
+        {
+            var list = new List<Payment_VDTO>();
+            using var conn = new SqlConnection(connectionString);
+            using var cmd = new SqlCommand("sp_GetPaymentVouchers", conn)
+            {
+                CommandType = CommandType.StoredProcedure
+            };
+            conn.Open();
+            using var rdr = cmd.ExecuteReader();
+            while (rdr.Read())
+            {
+                list.Add(new Payment_VDTO
+                {
+                    Pay_ID = rdr.GetInt32(rdr.GetOrdinal("Pay_ID")),
+                    ReferenceNo = rdr.GetString(rdr.GetOrdinal("ReferenceNo")),
+                    SubAccountID = rdr.GetInt32(rdr.GetOrdinal("SubAccountID")),
+                    VoucherDate = rdr.GetDateTime(rdr.GetOrdinal("VoucherDate")),
+                    Debit = rdr.GetDecimal(rdr.GetOrdinal("Debit")),
+                    Credit = rdr.GetDecimal(rdr.GetOrdinal("Credit")),
+                });
+            }
+            return list;
+        }
+        public static List<Reciept_VDTO> LoadReceiptVouchers(string connectionString)
+        {
+            var list = new List<Reciept_VDTO>();
+            using var conn = new SqlConnection( connectionString);
+            using var cmd = new SqlCommand("sp_GetReceiptVouchers", conn)
+            {
+                CommandType = CommandType.StoredProcedure
+            };
+            conn.Open();
+            using var rdr = cmd.ExecuteReader();
+            while (rdr.Read())
+            {
+                list.Add(new Reciept_VDTO
+                {
+                    R_ID = rdr.GetInt32(rdr.GetOrdinal("R_ID")),
+                    ReferenceNo = rdr.GetString(rdr.GetOrdinal("ReferenceNo")),
+                    SubAccountID = rdr.GetInt32(rdr.GetOrdinal("SubAccountID")),
+                    VoucherDate = rdr.GetDateTime(rdr.GetOrdinal("VoucherDate")),
+                    Debit = rdr.GetDecimal(rdr.GetOrdinal("Debit")),
+                    Credit = rdr.GetDecimal(rdr.GetOrdinal("Credit")),
+                });
+            }
+            return list;
+        }
+        private static void InsertVoucher(
+       char voucherType,
+       string connectionString,
+       string referenceNo,
+       DateTime voucherDate,
+       IEnumerable<(int SubAccountID, decimal Debit, decimal Credit)> lines
+   )
+        {
+            using var conn = new SqlConnection(connectionString);
+            conn.Open();
+            using var tx = conn.BeginTransaction();
+            try
+            {
+                foreach (var line in lines)
+                {
+                    using var cmd = new SqlCommand("dbo.sp_ManageVoucher", conn, tx)
+                    {
+                        CommandType = CommandType.StoredProcedure
+                    };
+                    cmd.Parameters.AddWithValue("@Action", "Insert");
+                    cmd.Parameters.AddWithValue("@VoucherType", voucherType.ToString());
+                    cmd.Parameters.AddWithValue("@VoucherID", DBNull.Value);
+                    cmd.Parameters.AddWithValue("@ReferenceNo", referenceNo);
+                    cmd.Parameters.AddWithValue("@SubAccountID", line.SubAccountID);
+                    cmd.Parameters.AddWithValue("@VoucherDate", voucherDate);
+                    cmd.Parameters.AddWithValue("@Debit", line.Debit);
+                    cmd.Parameters.AddWithValue("@Credit", line.Credit);
+                    cmd.ExecuteNonQuery();
+                }
+                tx.Commit();
+            }
+            catch
+            {
+                tx.Rollback();
+                throw;
+            }
+        }
+        public static void InsertJournalVoucher(
+        string connectionString,
+        string referenceNo,
+        DateTime voucherDate,
+        IEnumerable<(int SubAccountID, decimal Debit, decimal Credit)> lines
+    )
+        {
+            InsertVoucher('J', connectionString, referenceNo, voucherDate, lines);
+        }
+
+        public static void InsertPaymentVoucher(
+            string connectionString,
+            string referenceNo,
+            DateTime voucherDate,
+            IEnumerable<(int SubAccountID, decimal Debit, decimal Credit)> lines
+        )
+        {
+            InsertVoucher('P', connectionString, referenceNo, voucherDate, lines);
+        }
+
+        public static void InsertReceiptVoucher(
+            string connectionString,
+            string referenceNo,
+            DateTime voucherDate,
+            IEnumerable<(int SubAccountID, decimal Debit, decimal Credit)> lines
+        )
+        {
+            InsertVoucher('R', connectionString, referenceNo, voucherDate, lines);
+        }
+        public static void DeleteJournalVoucher(string connString, int journalId)
+        {
+            using var conn = new SqlConnection(connString);
+            conn.Open();
+            using var tx = conn.BeginTransaction();
+            using var cmd = new SqlCommand("dbo.sp_ManageVoucher", conn, tx)
+            {
+                CommandType = CommandType.StoredProcedure
+            };
+            cmd.Parameters.AddWithValue("@Action", "Delete");
+            cmd.Parameters.AddWithValue("@VoucherType", "J");       // Journal
+            cmd.Parameters.AddWithValue("@VoucherID", journalId);
+            cmd.Parameters.AddWithValue("@ReferenceNo", DBNull.Value);
+            cmd.Parameters.AddWithValue("@SubAccountID", DBNull.Value);
+            cmd.Parameters.AddWithValue("@VoucherDate", DBNull.Value);
+            cmd.Parameters.AddWithValue("@Debit", 0);
+            cmd.Parameters.AddWithValue("@Credit", 0);
+            cmd.ExecuteNonQuery();
+            tx.Commit();
+        }
+        public static void DeletePaymentVoucher(string connString, int paymentId)
+        {
+            using var conn = new SqlConnection(connString);
+            conn.Open();
+            using var tx = conn.BeginTransaction();
+            using var cmd = new SqlCommand("dbo.sp_ManageVoucher", conn, tx)
+            {
+                CommandType = CommandType.StoredProcedure
+            };
+            cmd.Parameters.AddWithValue("@Action", "Delete");
+            cmd.Parameters.AddWithValue("@VoucherType", "P");       // Payment
+            cmd.Parameters.AddWithValue("@VoucherID", paymentId);
+            cmd.Parameters.AddWithValue("@ReferenceNo", DBNull.Value);
+            cmd.Parameters.AddWithValue("@SubAccountID", DBNull.Value);
+            cmd.Parameters.AddWithValue("@VoucherDate", DBNull.Value);
+            cmd.Parameters.AddWithValue("@Debit", 0);
+            cmd.Parameters.AddWithValue("@Credit", 0);
+            cmd.ExecuteNonQuery();
+            tx.Commit();
+        }
+        public static void DeleteReceiptVoucher(string connectionString, int receiptId)
+        {
+            using var conn = new SqlConnection(connectionString);
+            conn.Open();
+            using var tx = conn.BeginTransaction();
+            using var cmd = new SqlCommand("dbo.sp_ManageVoucher", conn, tx)
+            {
+                CommandType = CommandType.StoredProcedure
+            };
+
+            // Tell the proc to delete a Receipt ('R')
+            cmd.Parameters.AddWithValue("@Action", "Delete");
+            cmd.Parameters.AddWithValue("@VoucherType", "R");
+            cmd.Parameters.AddWithValue("@VoucherID", receiptId);
+            // The rest can be null or zero
+            cmd.Parameters.AddWithValue("@ReferenceNo", DBNull.Value);
+            cmd.Parameters.AddWithValue("@SubAccountID", DBNull.Value);
+            cmd.Parameters.AddWithValue("@VoucherDate", DBNull.Value);
+            cmd.Parameters.AddWithValue("@Debit", 0);
+            cmd.Parameters.AddWithValue("@Credit", 0);
+
+            cmd.ExecuteNonQuery();
+            tx.Commit();
+        }
+
     }
 }

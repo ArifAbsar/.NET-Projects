@@ -4,9 +4,10 @@ using Microsoft.EntityFrameworkCore;
 using Mini_Accounting_Management_System.db.Tables;
 using Mini_Accounting_Management_System.Models;
 
+
 namespace Mini_Accounting_Management_System.db
 {
-    public class AppDbContext: IdentityDbContext<User>
+    public class AppDbContext : IdentityDbContext<User>
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
@@ -15,8 +16,15 @@ namespace Mini_Accounting_Management_System.db
         public DbSet<Account> Accounts { get; set; }
         public DbSet<AccountType> AccountTypes { get; set; } = default!;
         public DbSet<SubAccount> SubAccounts { get; set; } = default!;
-         protected override void OnModelCreating(ModelBuilder builder)
-         {
+        public DbSet<Voucher> Vouchers { get; set; }
+        public DbSet<VoucherDC> VoucherDCS { get; set; } = default!;
+        public DbSet<Journal_Voucher> Journal_Vouchers { get; set; } = default!;
+        public DbSet<Payment_Voucher> Payment_Vouchers { get; set; } = default!;
+        public DbSet<Reciept_Voucher> Reciept_Vouchers { get; set; } = default!;
+
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
             /* base.OnModelCreating(builder);
              var Admin = new IdentityRole("Admin");
              Admin.NormalizedName = "Admin";
@@ -32,17 +40,17 @@ namespace Mini_Accounting_Management_System.db
              );*/
             base.OnModelCreating(builder);
 
-            
+
             //AccountType configuration
-            
+
             builder.Entity<AccountType>(entity =>
             {
-                
+
                 entity.HasKey(e => e.A_ID);
 
                 entity.Property(e => e.A_ID)
                       .ValueGeneratedNever();
-                
+
 
                 entity.Property(e => e.Acc_Type)
                       .IsRequired()
@@ -55,11 +63,11 @@ namespace Mini_Accounting_Management_System.db
                 entity.Property(e => e.TotalBalance)
                       .HasPrecision(18, 2)
                       .HasDefaultValue(0m);
-                
+
             });
 
 
-            
+
             //SubAccount configuration
             builder.Entity<SubAccount>(entity =>
             {
@@ -68,14 +76,14 @@ namespace Mini_Accounting_Management_System.db
 
                 entity.Property(e => e.S_ID)
                       .ValueGeneratedNever();
-                
 
-                
+
+
                 entity.Property(e => e.Sub_Acc)
                       .IsRequired()
                       .HasMaxLength(100);
 
-                
+
                 entity.Property(e => e.Balance)
                       .HasPrecision(18, 2)
                       .HasDefaultValue(0m);
@@ -85,12 +93,34 @@ namespace Mini_Accounting_Management_System.db
                       .WithMany(t => t.SubAccounts)
                       .HasForeignKey(e => e.Type_A_ID)
                       .OnDelete(DeleteBehavior.Restrict);
-               
+
 
                 //Unique constraint on (Type_P_ID, Sub_Acc)
                 entity.HasIndex(e => new { e.Type_A_ID, e.Sub_Acc })
                       .IsUnique();
             });
+            builder.Entity<Journal_Voucher>(entity =>
+            {
+                entity.HasOne(jv => jv.SubAccount)
+                      .WithMany(sa => sa.JournalVouchers)
+                      .HasForeignKey(jv => jv.SubAccountID)
+                      .OnDelete(DeleteBehavior.Restrict);
+            });
+            builder.Entity<Payment_Voucher>(entity =>
+            {
+                entity.HasOne(jv => jv.SubAccount)
+                      .WithMany(sa => sa.PaymentVouchers)
+                      .HasForeignKey(jv => jv.SubAccountID)
+                      .OnDelete(DeleteBehavior.Restrict);
+            });
+            builder.Entity<Reciept_Voucher>(entity =>
+            {
+                entity.HasOne(jv => jv.SubAccount)
+                      .WithMany(sa => sa.RecieptVouchers)
+                      .HasForeignKey(jv => jv.SubAccountID)
+                      .OnDelete(DeleteBehavior.Restrict);
+            });
+
 
         }
     }

@@ -1,8 +1,346 @@
 ﻿@page
-@model PrivacyModel
-@{
-    ViewData["Title"] = "Vouchers";
-}
-<h1>@ViewData["Title"]</h1>
+@model Mini_Accounting_Management_System.Pages.PrivacyModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+<h1>Voucher Entry</h1>
 
-<p>Use this page to detail your site's privacy policy.</p>
+@* ==== Journal Voucher ==== *@
+<section class="mb-5">
+    <h2>Journal Voucher</h2>
+    <button id="btnAddJournal" class="btn btn-outline-primary mb-2">Add Voucher</button>
+
+    <div id="formJournal" class="card p-3 mb-3" style="display:none;">
+        <form method="post" asp-page-handler="CreateJournal">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                    <label asp-for="JournalHeader.ReferenceNo" class="form-label">Reference No.</label>
+                    <input asp-for="JournalHeader.ReferenceNo" class="form-control" />
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="JournalHeader.VoucherDate" class="form-label">Date</label>
+                    <input asp-for="JournalHeader.VoucherDate" type="date" class="form-control" />
+                </div>
+            </div>
+
+            <table class="table table-bordered mb-3" id="journalLinesTable">
+                <thead class="table-light">
+                    <tr>
+                        <th>Sub-Account</th>
+                        <th class="text-end">Debit</th>
+                        <th class="text-end">Credit</th>
+                        <th style="width:1%"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < Model.JournalLines.Count; i++)
+                    {
+                        <tr>
+                            <td>
+                                <select asp-for="JournalLines[@i].SubAccountID" class="form-select">
+                                    <option value="">— select —</option>
+                                    @foreach (var sa in Model.AllSubAccounts)
+                                    {
+                                        <option value="@sa.S_ID">@sa.Sub_Acc</option>
+                                    }
+                                </select>
+                            </td>
+                            <td>
+                                <input asp-for="JournalLines[@i].Debit" class="form-control text-end" />
+                            </td>
+                            <td>
+                                <input asp-for="JournalLines[@i].Credit" class="form-control text-end" />
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <div class="d-flex align-items-center mb-3">
+                <div class="me-4">Total Debit: <strong id="journalTotalDebit">0.00</strong></div>
+                <div class="me-4">Total Credit: <strong id="journalTotalCredit">0.00</strong></div>
+                <button type="submit" id="journalSave" class="btn btn-success me-2" disabled>Save</button>
+                <button type="button" id="journalCancel" class="btn btn-secondary">Cancel</button>
+            </div>
+        </form>
+    </div>
+</section>
+<h3>Existing Journal Vouchers</h3>
+<table class="table table-striped">
+    <thead class="table-light">
+        <tr>
+            
+            <th>Ref No.</th>
+            <th>Sub-Account</th>
+            <th>Date</th>
+            <th class="text-end">Debit</th>
+            <th class="text-end">Credit</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var v in Model.JournalVouchers)
+        {
+            <tr>
+                
+                <td>@v.ReferenceNo</td>
+                <td>@v.SubAccountID</td>
+                <td>@v.VoucherDate:yyyy-MM-dd</td>
+                <td class="text-end">@v.Debit</td>
+                <td class="text-end">@v.Credit</td>
+                <td>
+                    <form method="post" asp-page-handler="DeleteJournal"
+                          onsubmit="return confirm('Delete this journal voucher?');">
+                        <input type="hidden" name="journalId" value="@v.J_ID" />
+                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@* ==== Payment Voucher ==== *@
+<section class="mb-5">
+    <h2>Payment Voucher</h2>
+    <button id="btnAddPayment" class="btn btn-outline-primary mb-2">Add Voucher</button>
+
+    <div id="formPayment" class="card p-3 mb-3" style="display:none;">
+        <form method="post" asp-page-handler="AddPaymentLine">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                    <label asp-for="PaymentHeader.ReferenceNo" class="form-label">Reference No.</label>
+                    <input asp-for="PaymentHeader.ReferenceNo" class="form-control" />
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="PaymentHeader.VoucherDate" class="form-label">Date</label>
+                    <input asp-for="PaymentHeader.VoucherDate" type="date" class="form-control" />
+                </div>
+            </div>
+
+            <table class="table table-bordered mb-3" id="paymentLinesTable">
+                <thead class="table-light">
+                    <tr>
+                        <th>Sub-Account</th>
+                        <th class="text-end">Debit</th>
+                        <th class="text-end">Credit</th>
+                        <th style="width:1%"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < Model.PaylLines.Count; i++)
+                    {
+                        <tr>
+                            <td>
+                                <select asp-for="PaylLines[@i].SubAccountID" class="form-select">
+                                    <option value="">— select —</option>
+                                    @foreach (var sa in Model.AllSubAccounts)
+                                    {
+                                        <option value="@sa.S_ID">@sa.Sub_Acc</option>
+                                    }
+                                </select>
+                            </td>
+                            <td><input asp-for="PaylLines[@i].Debit" class="form-control text-end" /></td>
+                            <td><input asp-for="PaylLines[@i].Credit" class="form-control text-end" /></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <div class="d-flex align-items-center mb-3">
+                <div class="me-4">Total Debit: <strong id="paymentTotalDebit">0.00</strong></div>
+                <div class="me-4">Total Credit: <strong id="paymentTotalCredit">0.00</strong></div>
+                <button type="submit" id="paymentSave" class="btn btn-success me-2" disabled>Save</button>
+                <button type="button" id="paymentCancel" class="btn btn-secondary">Cancel</button>
+            </div>
+        </form>
+    </div>
+</section>
+
+<h3>Existing Payment Vouchers</h3>
+<table class="table table-striped">
+    <thead class="table-light">
+        <tr>
+            
+            <th>Ref No.</th>
+            <th>Sub-Account</th>
+            <th>Date</th>
+            <th class="text-end">Debit</th>
+            <th class="text-end">Credit</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var v in Model.PaymentVouchers)
+        {
+            <tr>
+                
+                <td>@v.ReferenceNo</td>
+                <td>@v.SubAccountID</td>
+                <td>@v.VoucherDate:yyyy-MM-dd</td>
+                <td class="text-end">@v.Debit</td>
+                <td class="text-end">@v.Credit</td>
+                <td>
+                    <form method="post" asp-page-handler="DeletePayment"
+                          onsubmit="return confirm('Delete this payment voucher?');">
+                        <input type="hidden" name="paymentId" value="@v.Pay_ID" />
+                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@* ==== Receipt Voucher ==== *@
+<section class="mb-5">
+    <h2>Receipt Voucher</h2>
+    <button id="btnAddReceipt" class="btn btn-outline-primary mb-2">Add Voucher</button>
+
+    <div id="formReceipt" class="card p-3 mb-3" style="display:none;">
+        <form method="post" asp-page-handler="AddRecieptLine">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                    <label asp-for="ReceiptHeader.ReferenceNo" class="form-label">Reference No.</label>
+                    <input asp-for="ReceiptHeader.ReferenceNo" class="form-control" />
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="ReceiptHeader.VoucherDate" class="form-label">Date</label>
+                    <input asp-for="ReceiptHeader.VoucherDate" type="date" class="form-control" />
+                </div>
+            </div>
+
+            <table class="table table-bordered mb-3" id="receiptLinesTable">
+                <thead class="table-light">
+                    <tr>
+                        <th>Sub-Account</th>
+                        <th class="text-end">Debit</th>
+                        <th class="text-end">Credit</th>
+                        <th style="width:1%"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < Model.RecieptLines.Count; i++)
+                    {
+                        <tr>
+                            <td>
+                                <select asp-for="RecieptLines[@i].SubAccountID" class="form-select">
+                                    <option value="">— select —</option>
+                                    @foreach (var sa in Model.AllSubAccounts)
+                                    {
+                                        <option value="@sa.S_ID">@sa.Sub_Acc</option>
+                                    }
+                                </select>
+                            </td>
+                            <td><input asp-for="RecieptLines[@i].Debit" class="form-control text-end" /></td>
+                            <td><input asp-for="RecieptLines[@i].Credit" class="form-control text-end" /></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <div class="d-flex align-items-center mb-3">
+                <div class="me-4">Total Debit: <strong id="receiptTotalDebit">0.00</strong></div>
+                <div class="me-4">Total Credit: <strong id="receiptTotalCredit">0.00</strong></div>
+                <button type="submit" id="receiptSave" class="btn btn-success me-2" disabled>Save</button>
+                <button type="button" id="receiptCancel" class="btn btn-secondary">Cancel</button>
+            </div>
+        </form>
+    </div>
+</section>
+<h3>Existing Receipt Vouchers</h3>
+<table class="table table-striped">
+    <thead class="table-light">
+        <tr>
+            
+            <th>Ref No.</th>
+            <th>Sub-Account</th>
+            <th>Date</th>
+            <th class="text-end">Debit</th>
+            <th class="text-end">Credit</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var v in Model.ReceiptVouchers)
+        {
+            <tr>
+                
+                <td>@v.ReferenceNo</td>
+                <td>@v.SubAccountID</td>
+                <td>@v.VoucherDate:yyyy-MM-dd</td>
+                <td class="text-end">@v.Debit</td>
+                <td class="text-end">@v.Credit</td>
+                <td>
+                    <form method="post" asp-page-handler="DeleteReceipt"
+                          onsubmit="return confirm('Delete this voucher?');">
+                        <input type="hidden" name="receiptId" value="@v.R_ID" />
+                        <button type="submit" class="btn btn-sm btn-danger">
+                            Delete
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+          function wire(prefix) {
+            const btnAdd    = document.getElementById(`btnAdd${prefix}`);
+            const formDiv   = document.getElementById(`form${prefix}`);
+            const btnCancel = document.getElementById(`${prefix.toLowerCase()}Cancel`);
+            const btnSave   = document.getElementById(`${prefix.toLowerCase()}Save`);
+            const tableBody = document.querySelector(`#${prefix.toLowerCase()}LinesTable tbody`);
+            const totD      = document.getElementById(`${prefix.toLowerCase()}TotalDebit`);
+            const totC      = document.getElementById(`${prefix.toLowerCase()}TotalCredit`);
+
+            function recalc() {
+              let d=0, c=0;
+              tableBody.querySelectorAll("input[name$='.Debit']").forEach(i => d += parseFloat(i.value)||0);
+              tableBody.querySelectorAll("input[name$='.Credit']").forEach(i => c += parseFloat(i.value)||0);
+              totD.textContent = d.toFixed(2);
+              totC.textContent = c.toFixed(2);
+              btnSave.disabled = (d + c === 0);
+            }
+
+            btnAdd.addEventListener('click', () => {
+              formDiv.style.display = 'block';
+              btnAdd.style.display = 'none';
+            });
+            btnCancel.addEventListener('click', () => {
+          // hide form
+                  formDiv.style.display = 'none';
+                  btnAdd.style.display = 'inline-block';
+
+                  // reset all selects back to first option
+                  tableBody.querySelectorAll('select').forEach(s => s.selectedIndex = 0);
+                  // clear all debit/credit inputs
+                  tableBody.querySelectorAll("input[name$='.Debit'],input[name$='.Credit']")
+                           .forEach(i => i.value = '0.00');
+
+                  // recalc totals (will go back to 0.00)
+                  recalc();
+            });
+
+            tableBody.addEventListener('click', e => {
+              if (e.target.classList.contains('remove-line')) {
+                e.target.closest('tr').remove();
+                recalc();
+              }
+            });
+            tableBody.addEventListener('input', e => {
+              if (e.target.matches("input[name$='.Debit'],input[name$='.Credit']")) recalc();
+            });
+          }
+
+          wire('Journal');
+          wire('Payment');
+          wire('Receipt');
+        });
+    </script>
+}

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mini_Accounting_Management_System.db;
 
@@ -11,9 +12,11 @@ using Mini_Accounting_Management_System.db;
 namespace Mini_Accounting_Management_System.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250607192634_add_voucher_DB")]
+    partial class add_voucher_DB
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -283,111 +286,6 @@ namespace Mini_Accounting_Management_System.Migrations
                     b.ToTable("AccountTypes");
                 });
 
-            modelBuilder.Entity("Mini_Accounting_Management_System.db.Tables.Journal_Voucher", b =>
-                {
-                    b.Property<int>("J_ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("J_ID"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<decimal>("Credit")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("Debit")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("ReferenceNo")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<int>("SubAccountID")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("VoucherDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("J_ID");
-
-                    b.HasIndex("SubAccountID");
-
-                    b.ToTable("Journal_Vouchers");
-                });
-
-            modelBuilder.Entity("Mini_Accounting_Management_System.db.Tables.Payment_Voucher", b =>
-                {
-                    b.Property<int>("Pay_ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Pay_ID"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<decimal>("Credit")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("Debit")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("ReferenceNo")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<int>("SubAccountID")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("VoucherDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Pay_ID");
-
-                    b.HasIndex("SubAccountID");
-
-                    b.ToTable("Payment_Vouchers");
-                });
-
-            modelBuilder.Entity("Mini_Accounting_Management_System.db.Tables.Reciept_Voucher", b =>
-                {
-                    b.Property<int>("R_ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("R_ID"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<decimal>("Credit")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("Debit")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("ReferenceNo")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<int>("SubAccountID")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("VoucherDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("R_ID");
-
-                    b.HasIndex("SubAccountID");
-
-                    b.ToTable("Reciept_Vouchers");
-                });
-
             modelBuilder.Entity("Mini_Accounting_Management_System.db.Tables.SubAccount", b =>
                 {
                     b.Property<int>("S_ID")
@@ -524,39 +422,6 @@ namespace Mini_Accounting_Management_System.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Mini_Accounting_Management_System.db.Tables.Journal_Voucher", b =>
-                {
-                    b.HasOne("Mini_Accounting_Management_System.db.Tables.SubAccount", "SubAccount")
-                        .WithMany("JournalVouchers")
-                        .HasForeignKey("SubAccountID")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("SubAccount");
-                });
-
-            modelBuilder.Entity("Mini_Accounting_Management_System.db.Tables.Payment_Voucher", b =>
-                {
-                    b.HasOne("Mini_Accounting_Management_System.db.Tables.SubAccount", "SubAccount")
-                        .WithMany("PaymentVouchers")
-                        .HasForeignKey("SubAccountID")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("SubAccount");
-                });
-
-            modelBuilder.Entity("Mini_Accounting_Management_System.db.Tables.Reciept_Voucher", b =>
-                {
-                    b.HasOne("Mini_Accounting_Management_System.db.Tables.SubAccount", "SubAccount")
-                        .WithMany("RecieptVouchers")
-                        .HasForeignKey("SubAccountID")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("SubAccount");
-                });
-
             modelBuilder.Entity("Mini_Accounting_Management_System.db.Tables.SubAccount", b =>
                 {
                     b.HasOne("Mini_Accounting_Management_System.db.Tables.AccountType", "AccountType")
@@ -573,7 +438,7 @@ namespace Mini_Accounting_Management_System.Migrations
                     b.HasOne("Mini_Accounting_Management_System.db.Tables.SubAccount", "SubAccount")
                         .WithMany()
                         .HasForeignKey("SubAccountID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Mini_Accounting_Management_System.db.Tables.Voucher", "Voucher")
@@ -590,15 +455,6 @@ namespace Mini_Accounting_Management_System.Migrations
             modelBuilder.Entity("Mini_Accounting_Management_System.db.Tables.AccountType", b =>
                 {
                     b.Navigation("SubAccounts");
-                });
-
-            modelBuilder.Entity("Mini_Accounting_Management_System.db.Tables.SubAccount", b =>
-                {
-                    b.Navigation("JournalVouchers");
-
-                    b.Navigation("PaymentVouchers");
-
-                    b.Navigation("RecieptVouchers");
                 });
 
             modelBuilder.Entity("Mini_Accounting_Management_System.db.Tables.Voucher", b =>
