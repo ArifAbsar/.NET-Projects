@@ -207,7 +207,7 @@ namespace Mini_Accounting_Management_System.Helper
         public static List<Reciept_VDTO> LoadReceiptVouchers(string connectionString)
         {
             var list = new List<Reciept_VDTO>();
-            using var conn = new SqlConnection( connectionString);
+            using var conn = new SqlConnection(connectionString);
             using var cmd = new SqlCommand("sp_GetReceiptVouchers", conn)
             {
                 CommandType = CommandType.StoredProcedure
@@ -358,6 +358,70 @@ namespace Mini_Accounting_Management_System.Helper
             cmd.ExecuteNonQuery();
             tx.Commit();
         }
+        public static List<UserRoleDTO> GetAllUsersWithRoles(string connectionString)
+        {
+            var list = new List<UserRoleDTO>();
 
+            using var conn = new SqlConnection(connectionString);
+            using var cmd = new SqlCommand("dbo.sp_GetUsersWithRoles", conn)
+            {
+                CommandType = CommandType.StoredProcedure
+            };
+
+            conn.Open();
+            using var rdr = cmd.ExecuteReader();
+            while (rdr.Read())
+            {
+                list.Add(new UserRoleDTO
+                {
+                    UserId = rdr.GetString(rdr.GetOrdinal("UserId")),
+                    UserName = rdr.GetString(rdr.GetOrdinal("UserName")),
+                    Email = rdr.GetString(rdr.GetOrdinal("Email")),
+                    RoleName = rdr.GetString(rdr.GetOrdinal("RoleName"))
+                });
+            }
+
+            return list;
+        }
+        public static List<RoleDTO> GetAllRoles(string connectionString)
+        {
+            var roles = new List<RoleDTO>();
+            using var conn = new SqlConnection(connectionString);
+            using var cmd = new SqlCommand("dbo.sp_GetAllRoles", conn)
+            {
+                CommandType = CommandType.StoredProcedure
+            };
+            conn.Open();
+            using var rdr = cmd.ExecuteReader();
+            while (rdr.Read())
+            {
+                roles.Add(new RoleDTO
+                {
+                    RoleId = rdr.GetString(rdr.GetOrdinal("RoleId")),
+                    RoleName = rdr.GetString(rdr.GetOrdinal("RoleName"))
+                });
+            }
+            return roles;
+        }
+        public static void AssignUserRoleByName(
+                   string connectionString,
+                   string adminUserName,
+                   string targetUserName,
+                   string roleName
+   )
+        {
+            using var conn = new SqlConnection(connectionString);
+            using var cmd = new SqlCommand("dbo.sp_AssignUserRole", conn)
+            {
+                CommandType = CommandType.StoredProcedure
+            };
+
+            cmd.Parameters.AddWithValue("@AdminUserName", adminUserName);
+            cmd.Parameters.AddWithValue("@TargetUserName", targetUserName);
+            cmd.Parameters.AddWithValue("@RoleName", roleName);
+
+            conn.Open();
+            cmd.ExecuteNonQuery();
+        }
     }
 }
