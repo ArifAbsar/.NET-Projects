@@ -85,7 +85,7 @@
                 
                 <td>@v.ReferenceNo</td>
                 <td>@v.SubAccountID</td>
-                <td>@v.VoucherDate:yyyy-MM-dd</td>
+                <td>@v.VoucherDate</td>
                 <td class="text-end">@v.Debit</td>
                 <td class="text-end">@v.Credit</td>
                 <td>
@@ -99,7 +99,18 @@
         }
     </tbody>
 </table>
-
+<div class="mt-2">
+    <strong>Total Debit:</strong>
+    @Model.JournalTotalDebit.ToString("N2")
+    <strong class="ms-3">Total Credit:</strong>
+    @Model.JournalTotalCredit.ToString("N2")
+    @if (Model.JournalTotalDebit != Model.JournalTotalCredit)
+    {
+        <span class="text-danger ms-3">
+            Totals do not match – please recheck.
+        </span>
+    }
+</div>
 @* ==== Payment Voucher ==== *@
 <section class="mb-5">
     <h2>Payment Voucher</h2>
@@ -179,7 +190,7 @@
                 
                 <td>@v.ReferenceNo</td>
                 <td>@v.SubAccountID</td>
-                <td>@v.VoucherDate:yyyy-MM-dd</td>
+                <td>@v.VoucherDate</td>
                 <td class="text-end">@v.Debit</td>
                 <td class="text-end">@v.Credit</td>
                 <td>
@@ -193,7 +204,19 @@
         }
     </tbody>
 </table>
-@* ==== Receipt Voucher ==== *@
+<div class="mt-2">
+    <strong>Total Debit:</strong>
+    @Model.PaymentTotalDebit.ToString("N2")
+    <strong class="ms-3">Total Credit:</strong>
+    @Model.PaymentTotalCredit.ToString("N2")
+    @if (Model.PaymentTotalDebit != Model.PaymentTotalCredit)
+    {
+        <span class="text-danger ms-3">
+            Totals do not match – please recheck.
+        </span>
+    }
+</div>
+<!-- ==== Receipt Voucher ==== -->
 <section class="mb-5">
     <h2>Receipt Voucher</h2>
     <button id="btnAddReceipt" class="btn btn-outline-primary mb-2">Add Voucher</button>
@@ -271,7 +294,7 @@
                 
                 <td>@v.ReferenceNo</td>
                 <td>@v.SubAccountID</td>
-                <td>@v.VoucherDate:yyyy-MM-dd</td>
+                <td>@v.VoucherDate</td>
                 <td class="text-end">@v.Debit</td>
                 <td class="text-end">@v.Credit</td>
                 <td>
@@ -287,6 +310,19 @@
         }
     </tbody>
 </table>
+<div class="mt-2">
+    <strong>Total Debit:</strong>
+    @Model.ReceiptTotalDebit.ToString("N2")
+    <strong class="ms-3">Total Credit:</strong>
+    @Model.ReceiptTotalCredit.ToString("N2")
+    @if (Model.ReceiptTotalDebit != Model.ReceiptTotalCredit)
+    {
+        <span class="text-danger ms-3">
+            Totals do not match – please recheck.
+        </span>
+    }
+</div>
+
 @section Scripts {
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -313,17 +349,17 @@
               btnAdd.style.display = 'none';
             });
             btnCancel.addEventListener('click', () => {
-          // hide form
+          //hide form
                   formDiv.style.display = 'none';
                   btnAdd.style.display = 'inline-block';
 
-                  // reset all selects back to first option
+                  //reset all selects back to first option
                   tableBody.querySelectorAll('select').forEach(s => s.selectedIndex = 0);
-                  // clear all debit/credit inputs
+                  //clear all debit/credit inputs
                   tableBody.querySelectorAll("input[name$='.Debit'],input[name$='.Credit']")
                            .forEach(i => i.value = '0.00');
 
-                  // recalc totals (will go back to 0.00)
+                  //recalc totals (will go back to 0.00)
                   recalc();
             });
 
@@ -341,6 +377,6 @@
           wire('Journal');
           wire('Payment');
           wire('Receipt');
-        });
+       
     </script>
 }

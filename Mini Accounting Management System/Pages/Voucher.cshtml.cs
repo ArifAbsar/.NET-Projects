@@ -35,19 +35,85 @@ namespace Mini_Accounting_Management_System.Pages
         [BindProperty]
         public JournalHead JournalHeader { get; set; } = new();
         [BindProperty]
-        public JLINE JounalLines { get; set; } = new ();
-        [BindProperty]
         public PaymentHeader PaymentHeader { get; set; } = new();
-        // Fix for CS1579: Ensure that PaymentLines is a collection type that implements IEnumerable.  
-        // Update the type of PaymentLines to a collection of PLINE objects.  
 
-        [BindProperty]
-        public List<PLINE> PaymentLines { get; set; } = new List<PLINE>();
+        public decimal JournalTotalDebit
+        {
+            get {
+                decimal total = 0;
+                foreach (var v in JournalVouchers)
+                {
+                    total += v.Debit;
+
+                }
+                return total;
+            }
+        }
+        public decimal JournalTotalCredit
+        {
+            get
+            {
+                decimal total = 0;
+                foreach (var v in JournalVouchers)
+                {
+                    total += v.Credit;
+                }
+                return total;
+            }
+        }
+        
+        public decimal PaymentTotalDebit
+        {
+            get
+            {
+                decimal total = 0;
+                foreach (var v in PaymentVouchers)
+                {
+                    total += v.Debit;
+                }
+                return total;
+            }
+        }
+        public decimal PaymentTotalCredit
+        {
+            get
+            {
+                decimal total = 0;
+                foreach (var v in PaymentVouchers)
+                {
+                    total += v.Credit;
+                }
+                return total;
+            }
+        }
+        public decimal ReceiptTotalDebit
+        {
+            get
+            {
+                decimal total = 0;
+                foreach (var v in ReceiptVouchers)
+                {
+                    total += v.Debit;
+                }
+                return total;
+            }
+        }
+        public decimal ReceiptTotalCredit
+        {
+            get
+            {
+                decimal total = 0;
+                foreach (var v in ReceiptVouchers)
+                {
+                    total += v.Credit;
+                }
+                return total;
+            }
+        }
 
         [BindProperty]
         public RecieptHeader ReceiptHeader { get; set; } = new();
-        //[BindProperty]
-        //public List<RLINE> ReceiptLines { get; set; } = new List<RLINE>();
+
         public void OnGet()
         {
             string connString = _config.GetConnectionString("DefaultConnection");
@@ -70,21 +136,21 @@ namespace Mini_Accounting_Management_System.Pages
             }
 
 
-            // 2) build the list of tuples manually (no Select)
+            //build the list of tuples 
             var voucherLines = new List<(int SubAccountID, decimal Debit, decimal Credit)>();
             foreach (var line in JournalLines)
             {
                 voucherLines.Add((line.SubAccountID, line.Debit, line.Credit));
             }
-            // 2) Call helper
+            //Call helper
             AccountHelper.InsertJournalVoucher(
                 connString,
                 JournalHeader.ReferenceNo,
                 JournalHeader.VoucherDate,
-                JournalLines.Select(l => (l.SubAccountID, l.Debit, l.Credit))
+                voucherLines
             );
 
-            // 3) back to GET (clears the form)
+            //back to GET 
             return RedirectToPage();
         }
         public IActionResult OnPostAddPaymentLine()
@@ -92,16 +158,16 @@ namespace Mini_Accounting_Management_System.Pages
             string connString = _config.GetConnectionString("DefaultConnection");
             decimal totalDebit = 0m;
             decimal totalCredit = 0m;
-            foreach (var line in PaymentLines)
+            foreach (var line in PaylLines)
             {
                 totalDebit += line.Debit;
                 totalCredit += line.Credit;
             }
 
 
-            // 2) build the list of tuples manually (no Select)
+            //build the list of tuples manually 
             var voucherLines = new List<(int SubAccountID, decimal Debit, decimal Credit)>();
-            foreach (var line in PaymentLines)
+            foreach (var line in PaylLines)
             {
                 voucherLines.Add((line.SubAccountID, line.Debit, line.Credit));
             }
@@ -110,14 +176,14 @@ namespace Mini_Accounting_Management_System.Pages
                 connString,
                 PaymentHeader.ReferenceNo,
                 PaymentHeader.VoucherDate,
-                PaymentLines.Select(l => (l.SubAccountID, l.Debit, l.Credit))
+                voucherLines
             );
 
             return RedirectToPage();
         }
         public IActionResult OnPostAddRecieptLine()
         {
-            // 1) compute totals without LINQ:
+            
             decimal totalDebit = 0m;
             decimal totalCredit = 0m;
             foreach (var line in RecieptLines)
@@ -128,14 +194,14 @@ namespace Mini_Accounting_Management_System.Pages
 
             
 
-            // 2) build the list of tuples manually (no Select)
+            //build the list of tuples manually 
             var voucherLines = new List<(int SubAccountID, decimal Debit, decimal Credit)>();
             foreach (var line in RecieptLines)
             {
                 voucherLines.Add((line.SubAccountID, line.Debit, line.Credit));
             }
 
-            // 3) call your helper
+            
             string connString = _config.GetConnectionString("DefaultConnection")!;
             AccountHelper.InsertReceiptVoucher(
                 connString,
@@ -144,34 +210,34 @@ namespace Mini_Accounting_Management_System.Pages
                 voucherLines
             );
 
-            // 4) done
+            
             return RedirectToPage();
         }
         public IActionResult OnPostDeleteReceipt(int receiptId)
         {
-            // call the helper to run sp_ManageVoucher ... , @Action='Delete', @VoucherType='R'
+            
             string connString = _config.GetConnectionString("DefaultConnection")!;
             AccountHelper.DeleteReceiptVoucher(connString, receiptId);
 
-            // reload the page so the updated list shows
+            //reload the page so the updated list shows
             return RedirectToPage();
         }
         public IActionResult OnPostDeleteJournal(int journalId)
         {
-            // call the helper to run sp_ManageVoucher ... , @Action='Delete', @VoucherType='R'
+            
             string connString = _config.GetConnectionString("DefaultConnection")!;
             AccountHelper.DeleteJournalVoucher(connString, journalId);
 
-            // reload the page so the updated list shows
+            //reload the page so the updated list shows
             return RedirectToPage();
         }
         public IActionResult OnPostDeletePayment(int paymentId)
         {
-            // call the helper to run sp_ManageVoucher ... , @Action='Delete', @VoucherType='R'
+            
             string connString = _config.GetConnectionString("DefaultConnection")!;
             AccountHelper.DeletePaymentVoucher(connString, paymentId);
 
-            // reload the page so the updated list shows
+            
             return RedirectToPage();
         }
 
