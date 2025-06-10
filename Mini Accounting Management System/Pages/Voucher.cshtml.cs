@@ -5,6 +5,7 @@ using Mini_Accounting_Management_System.DTO;
 using System.Data;
 using System.Drawing;
 using Mini_Accounting_Management_System.Helper;
+using Microsoft.AspNetCore.Authorization;
 namespace Mini_Accounting_Management_System.Pages
 {
     public class PrivacyModel : PageModel
@@ -13,7 +14,6 @@ namespace Mini_Accounting_Management_System.Pages
         public PrivacyModel(IConfiguration config)
         {
             _config = config;
-           
         }
 
         public List<SubAccountDTO> AllSubAccounts { get; set; }
@@ -39,12 +39,12 @@ namespace Mini_Accounting_Management_System.Pages
 
         public decimal JournalTotalDebit
         {
-            get {
+            get
+            {
                 decimal total = 0;
                 foreach (var v in JournalVouchers)
                 {
                     total += v.Debit;
-
                 }
                 return total;
             }
@@ -61,7 +61,7 @@ namespace Mini_Accounting_Management_System.Pages
                 return total;
             }
         }
-        
+
         public decimal PaymentTotalDebit
         {
             get
@@ -113,7 +113,6 @@ namespace Mini_Accounting_Management_System.Pages
 
         [BindProperty]
         public RecieptHeader ReceiptHeader { get; set; } = new();
-
         public void OnGet()
         {
             string connString = _config.GetConnectionString("DefaultConnection");
@@ -121,10 +120,15 @@ namespace Mini_Accounting_Management_System.Pages
             JournalVouchers = AccountHelper.GetJournalVouchers(connString);
             PaymentVouchers = AccountHelper.LoadPaymentVouchers(connString);
             ReceiptVouchers = AccountHelper.LoadReceiptVouchers(connString);
-
         }
+
         public IActionResult OnPostCreateJournal()
         {
+            if (User.IsInRole("Viewer"))
+            {
+                return Forbid();
+            }
+
             string connString = _config.GetConnectionString("DefaultConnection");
 
             decimal totalDebit = 0m;
@@ -135,14 +139,12 @@ namespace Mini_Accounting_Management_System.Pages
                 totalCredit += line.Credit;
             }
 
-
-            //build the list of tuples 
             var voucherLines = new List<(int SubAccountID, decimal Debit, decimal Credit)>();
             foreach (var line in JournalLines)
             {
                 voucherLines.Add((line.SubAccountID, line.Debit, line.Credit));
             }
-            //Call helper
+
             AccountHelper.InsertJournalVoucher(
                 connString,
                 JournalHeader.ReferenceNo,
@@ -150,11 +152,16 @@ namespace Mini_Accounting_Management_System.Pages
                 voucherLines
             );
 
-            //back to GET 
             return RedirectToPage();
         }
+
         public IActionResult OnPostAddPaymentLine()
         {
+            if (User.IsInRole("Viewer"))
+            {
+                return Forbid();
+            }
+
             string connString = _config.GetConnectionString("DefaultConnection");
             decimal totalDebit = 0m;
             decimal totalCredit = 0m;
@@ -164,8 +171,6 @@ namespace Mini_Accounting_Management_System.Pages
                 totalCredit += line.Credit;
             }
 
-
-            //build the list of tuples manually 
             var voucherLines = new List<(int SubAccountID, decimal Debit, decimal Credit)>();
             foreach (var line in PaylLines)
             {
@@ -181,9 +186,14 @@ namespace Mini_Accounting_Management_System.Pages
 
             return RedirectToPage();
         }
+
         public IActionResult OnPostAddRecieptLine()
         {
-            
+            if (User.IsInRole("Viewer"))
+            {
+                return Forbid();
+            }
+
             decimal totalDebit = 0m;
             decimal totalCredit = 0m;
             foreach (var line in RecieptLines)
@@ -192,16 +202,12 @@ namespace Mini_Accounting_Management_System.Pages
                 totalCredit += line.Credit;
             }
 
-            
-
-            //build the list of tuples manually 
             var voucherLines = new List<(int SubAccountID, decimal Debit, decimal Credit)>();
             foreach (var line in RecieptLines)
             {
                 voucherLines.Add((line.SubAccountID, line.Debit, line.Credit));
             }
 
-            
             string connString = _config.GetConnectionString("DefaultConnection")!;
             AccountHelper.InsertReceiptVoucher(
                 connString,
@@ -210,39 +216,44 @@ namespace Mini_Accounting_Management_System.Pages
                 voucherLines
             );
 
-            
             return RedirectToPage();
         }
+
         public IActionResult OnPostDeleteReceipt(int receiptId)
         {
-            
+            if (User.IsInRole("Viewer"))
+            {
+                return Forbid();
+            }
             string connString = _config.GetConnectionString("DefaultConnection")!;
             AccountHelper.DeleteReceiptVoucher(connString, receiptId);
 
-            //reload the page so the updated list shows
             return RedirectToPage();
         }
+
         public IActionResult OnPostDeleteJournal(int journalId)
         {
-            
+            if (User.IsInRole("Viewer"))
+            {
+                return Forbid();
+            }
             string connString = _config.GetConnectionString("DefaultConnection")!;
             AccountHelper.DeleteJournalVoucher(connString, journalId);
 
-            //reload the page so the updated list shows
             return RedirectToPage();
         }
+
         public IActionResult OnPostDeletePayment(int paymentId)
         {
-            
+            if (User.IsInRole("Viewer"))
+            {
+                return Forbid();
+            }
             string connString = _config.GetConnectionString("DefaultConnection")!;
             AccountHelper.DeletePaymentVoucher(connString, paymentId);
 
-            
             return RedirectToPage();
         }
-
-
-
     }
 
 }

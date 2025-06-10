@@ -15,10 +15,14 @@
             <h2 class="fw-bold">Chart of Accounts</h2>
             <p class="text-muted">Click any account type to view its sub-accounts.</p>
         </div>
-        <!--If you press Add New button it will show form to add new Account type-->
-        <button id="showFormButton" class="btn btn-outline-dark mb-4">
-            Add New Account
-        </button>
+       
+       
+            <button id="showFormButton" class="btn btn-outline-dark mb-4">
+                Add New Account
+            </button>
+            
+        
+        
        
         <div id="newAccountFormContainer" style="display: none;">
         <h3>Create a New Account Type</h3>
@@ -33,24 +37,8 @@
             Cancel
         </button>
     </form>
-        <!--Script for to press the button and show the AccountType form-->
-            <script>
-                const showFormButton = document.getElementById('showFormButton');
-                const cancelFormButton = document.getElementById('cancelFormButton');
-                const newAccountFormContainer = document.getElementById('newAccountFormContainer');
-
-                //Show form and hide button
-                showFormButton.addEventListener('click', function () {
-                    newAccountFormContainer.style.display = 'block';
-                    showFormButton.style.display = 'none';
-                });
-
-                //hide form and show button again
-                cancelFormButton.addEventListener('click', function () {
-                    newAccountFormContainer.style.display = 'none';
-                    showFormButton.style.display = 'inline-block';
-                });
-            </script>
+        
+            
     <hr class="my-4" />
     </div>
         <!-- Account Types Table -->
@@ -140,42 +128,7 @@
             </form>
             <hr class="my-4" />
         </div>
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
-               
-                const addButtons = document.querySelectorAll('.show-add-sub-button');
-                const addSubContainer = document.getElementById('addSubAccountContainer');
-                const hiddenTypeFilterInput = document.getElementById('hiddenTypeFilter');
-                const parentTypeLabel = document.getElementById('parentTypeLabel');
-                const cancelAddSubBtn = document.getElementById('cancelAddSubButton');
-
-                addButtons.forEach(btn => {
-                    btn.addEventListener('click', function () {
-                        //Read the parent A_ID from data-typeid
-                        const parentId = this.getAttribute('data-typeid');
-
-                        
-                        hiddenTypeFilterInput.value = parentId;
-
-                        parentTypeLabel.textContent = parentId;
-
-                        //Show the form container and scroll into view
-                        addSubContainer.style.display = 'block';
-                        addSubContainer.scrollIntoView({ behavior: 'smooth' });
-
-                        //Clear any previous values from the form fields
-                        document.getElementById('NewSubAccName').value = '';
-                        document.getElementById('NewSubBalance').value = '';
-                    });
-                });
-
-                //Cancel hides the form
-                cancelAddSubBtn.addEventListener('click', function () {
-                    addSubContainer.style.display = 'none';
-                    hiddenTypeFilterInput.value = '';
-                });
-            });
-        </script>
+        
 
         <!--Sub-Accounts Table -->
         @if (Model.TypeFilter.HasValue)
@@ -247,6 +200,59 @@
             </script>
         }
     </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const addButtons = document.querySelectorAll('.show-add-sub-button');
+            const addSubContainer = document.getElementById('addSubAccountContainer');
+            const hiddenTypeFilterInput = document.getElementById('hiddenTypeFilter');
+            const parentTypeLabel = document.getElementById('parentTypeLabel');
+            const cancelAddSubBtn = document.getElementById('cancelAddSubButton');
+
+            addButtons.forEach(btn => {
+                btn.addEventListener('click', function () {
+                    //Read the parent A_ID from data-typeid
+                    const parentId = this.getAttribute('data-typeid');
+
+
+                    hiddenTypeFilterInput.value = parentId;
+
+                    parentTypeLabel.textContent = parentId;
+
+                    //Show the form container and scroll into view
+                    addSubContainer.style.display = 'block';
+                    addSubContainer.scrollIntoView({ behavior: 'smooth' });
+
+                    //Clear any previous values from the form fields
+                    document.getElementById('NewSubAccName').value = '';
+                    document.getElementById('NewSubBalance').value = '';
+                });
+            });
+
+            //Cancel hides the form
+            cancelAddSubBtn.addEventListener('click', function () {
+                addSubContainer.style.display = 'none';
+                hiddenTypeFilterInput.value = '';
+            });
+        });
+    </script>
+    <script>
+        const showFormButton = document.getElementById('showFormButton');
+        const cancelFormButton = document.getElementById('cancelFormButton');
+        const newAccountFormContainer = document.getElementById('newAccountFormContainer');
+
+        //Show form and hide button
+        showFormButton.addEventListener('click', function () {
+            newAccountFormContainer.style.display = 'block';
+            showFormButton.style.display = 'none';
+        });
+
+        //hide form and show button again
+        cancelFormButton.addEventListener('click', function () {
+            newAccountFormContainer.style.display = 'none';
+            showFormButton.style.display = 'inline-block';
+        });
+    </script>
 }
 
 

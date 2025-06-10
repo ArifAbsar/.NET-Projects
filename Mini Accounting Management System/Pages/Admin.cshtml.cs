@@ -24,6 +24,8 @@ namespace Mini_Accounting_Management_System.Pages
         }
         [BindProperty]
         public string SelectedUserName { get; set; } = "";
+        [BindProperty]
+        public string SelectedRoleId { get; set; } = "";
 
         [BindProperty]
         public string SelectedRoleName { get; set; } = "";
@@ -36,21 +38,17 @@ namespace Mini_Accounting_Management_System.Pages
         public IActionResult OnPostAssignRole()
         {
             var connectionString = _config.GetConnectionString("DefaultConnection")!;
-            try
-            {
+            
+            
                 AccountHelper.AssignUserRoleByName(connectionString,
                     User.Identity!.Name!,
                     SelectedUserName,
                     SelectedRoleName
                 );
                 TempData["Success"] = $"Assigned {SelectedRoleName} to {SelectedUserName}.";
-            }
-            catch (SqlException ex)
-            {
-                ModelState.AddModelError("", ex.Message);
-            }
-            OnGet();
-            return Page();
+
+
+            return RedirectToPage();
         }
     }
 }

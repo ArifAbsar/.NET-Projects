@@ -6,7 +6,9 @@
 
 @if (TempData["Success"] != null)
 {
-    <div class="alert alert-success">@TempData["Success"]</div>
+    <div id="successAlert" class="alert alert-success">
+        @TempData["Success"]
+    </div>
 }
 
 <table class="table table-bordered">
@@ -29,6 +31,7 @@
                         <input type="hidden" name="SelectedUserName" value="@u.UserName" />
 
                         <select asp-for="SelectedRoleName" class="form-select me-2">
+                        <!--<select asp-for="SelectedRoleId" class="form-select me-2">-->
                             <option value="">-- select role --</option>
                             @foreach (var role in Model.AllRoles)
                             {
@@ -43,13 +46,17 @@
         }
     </tbody>
 </table>
-
-@if (!ModelState.IsValid)
-{
-    <div class="alert alert-danger mt-3">
-        @foreach (var err in ViewData.ModelState.Values.SelectMany(v => v.Errors))
-        {
-            <div>@err.ErrorMessage</div>
-        }
-    </div>
+@section Scripts {
+    <script>
+        // Wait 3 seconds, then fade out and remove the alert
+        setTimeout(() => {
+          const alert = document.getElementById('successAlert');
+          if (!alert) return;
+          // fade out over 0.5s
+          alert.style.transition = 'opacity 0.5s';
+          alert.style.opacity = '0';
+          // remove it after the fade
+          setTimeout(() => alert.remove(), 500);
+        }, 3000);
+    </script>
 }

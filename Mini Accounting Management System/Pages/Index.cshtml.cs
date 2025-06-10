@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Mini_Accounting_Management_System.db.Tables;
@@ -6,6 +7,7 @@ using Mini_Accounting_Management_System.Helper;
 
 namespace Mini_Accounting_Management_System.Pages
 {
+    [Authorize]
     public class IndexModel : PageModel
     {
         private readonly IConfiguration _config;
@@ -37,6 +39,7 @@ namespace Mini_Accounting_Management_System.Pages
                 SubAccounts = AccountHelper.GetSubAccountsByType(connString, TypeFilter.Value);
             }
         }
+     
         public IActionResult OnPostFilterByType(int? TypeFilter)
         {
             if (!TypeFilter.HasValue)
@@ -51,6 +54,10 @@ namespace Mini_Accounting_Management_System.Pages
 
         public IActionResult OnpostWholeAccount()
         {
+            if (User.IsInRole("Viewer"))
+            {
+                return Forbid();
+            }
             string connString = _config.GetConnectionString("DefaultConnection");
             if (string.IsNullOrEmpty(AccountTypeName))
             {
@@ -61,7 +68,10 @@ namespace Mini_Accounting_Management_System.Pages
         }
         public IActionResult OnPostAddSubAccount()
         {
-            
+            if (User.IsInRole("Viewer"))
+            {
+                return Forbid();
+            }
             if (TypeFilter == null || string.IsNullOrWhiteSpace(NewSubAccName))
             {
                 return RedirectToPage(new { TypeFilter });
@@ -80,8 +90,12 @@ namespace Mini_Accounting_Management_System.Pages
             return RedirectToPage(new { TypeFilter });
         }
         public IActionResult OnPostDeleteSubAccount() 
-        { 
-            if(!TypeFilter.HasValue|| Sub_id <= 0)
+        {
+            if (User.IsInRole("Viewer"))
+            {
+                return Forbid();
+            }
+            if (!TypeFilter.HasValue|| Sub_id <= 0)
             {
                 return RedirectToPage(new { TypeFilter });
             }

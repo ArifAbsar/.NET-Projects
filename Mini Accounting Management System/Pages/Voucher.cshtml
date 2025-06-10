@@ -3,9 +3,12 @@
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 <h1>Voucher Entry</h1>
 
-@* ==== Journal Voucher ==== *@
+@* -- Journal Voucher -- *@
 <section class="mb-5">
     <h2>Journal Voucher</h2>
+   
+
+   
     <button id="btnAddJournal" class="btn btn-outline-primary mb-2">Add Voucher</button>
 
     <div id="formJournal" class="card p-3 mb-3" style="display:none;">
@@ -111,7 +114,7 @@
         </span>
     }
 </div>
-@* ==== Payment Voucher ==== *@
+@* -- Payment Voucher -- *@
 <section class="mb-5">
     <h2>Payment Voucher</h2>
     <button id="btnAddPayment" class="btn btn-outline-primary mb-2">Add Voucher</button>
@@ -216,7 +219,7 @@
         </span>
     }
 </div>
-<!-- ==== Receipt Voucher ==== -->
+<!--  Receipt Voucher -->
 <section class="mb-5">
     <h2>Receipt Voucher</h2>
     <button id="btnAddReceipt" class="btn btn-outline-primary mb-2">Add Voucher</button>
@@ -327,6 +330,8 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
           function wire(prefix) {
+            console.log(`Initializing ${prefix} voucher`);
+
             const btnAdd    = document.getElementById(`btnAdd${prefix}`);
             const formDiv   = document.getElementById(`form${prefix}`);
             const btnCancel = document.getElementById(`${prefix.toLowerCase()}Cancel`);
@@ -335,32 +340,34 @@
             const totD      = document.getElementById(`${prefix.toLowerCase()}TotalDebit`);
             const totC      = document.getElementById(`${prefix.toLowerCase()}TotalCredit`);
 
+            //Skip wiring to avoid null errors
+            if (!btnAdd || !formDiv || !btnCancel || !btnSave || !tableBody || !totD || !totC) {
+              console.warn(`Skipping wiring for ${prefix}: missing element`);
+              return;
+            }
+
             function recalc() {
-              let d=0, c=0;
-              tableBody.querySelectorAll("input[name$='.Debit']").forEach(i => d += parseFloat(i.value)||0);
-              tableBody.querySelectorAll("input[name$='.Credit']").forEach(i => c += parseFloat(i.value)||0);
+              let d = 0, c = 0;
+              tableBody.querySelectorAll("input[name$='.Debit']")
+                       .forEach(i => d += parseFloat(i.value) || 0);
+              tableBody.querySelectorAll("input[name$='.Credit']")
+                       .forEach(i => c += parseFloat(i.value) || 0);
               totD.textContent = d.toFixed(2);
               totC.textContent = c.toFixed(2);
               btnSave.disabled = (d + c === 0);
             }
 
             btnAdd.addEventListener('click', () => {
-              formDiv.style.display = 'block';
-              btnAdd.style.display = 'none';
+              formDiv.style.display  = 'block';
+              btnAdd.style.display   = 'none';
             });
             btnCancel.addEventListener('click', () => {
-          //hide form
-                  formDiv.style.display = 'none';
-                  btnAdd.style.display = 'inline-block';
-
-                  //reset all selects back to first option
-                  tableBody.querySelectorAll('select').forEach(s => s.selectedIndex = 0);
-                  //clear all debit/credit inputs
-                  tableBody.querySelectorAll("input[name$='.Debit'],input[name$='.Credit']")
-                           .forEach(i => i.value = '0.00');
-
-                  //recalc totals (will go back to 0.00)
-                  recalc();
+              formDiv.style.display  = 'none';
+              btnAdd.style.display   = 'inline-block';
+              tableBody.querySelectorAll('select').forEach(s => s.selectedIndex = 0);
+              tableBody.querySelectorAll("input[name$='.Debit'],input[name$='.Credit']")
+                       .forEach(i => i.value = '0.00');
+              recalc();
             });
 
             tableBody.addEventListener('click', e => {
@@ -370,13 +377,15 @@
               }
             });
             tableBody.addEventListener('input', e => {
-              if (e.target.matches("input[name$='.Debit'],input[name$='.Credit']")) recalc();
+              if (e.target.matches("input[name$='.Debit'],input[name$='.Credit']")) {
+                recalc();
+              }
             });
           }
 
           wire('Journal');
           wire('Payment');
           wire('Receipt');
-       
+        });
     </script>
 }
