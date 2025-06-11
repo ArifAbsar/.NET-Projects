@@ -258,11 +258,9 @@ namespace Mini_Accounting_Management_System.Pages
         public IActionResult OnPostExportExcel()
         {
             var connectionString = _config.GetConnectionString("DefaultConnection")!;
-            JournalVouchers = AccountHelper.GetJournalVouchers(connectionString);    
-            PaymentVouchers = AccountHelper.LoadPaymentVouchers(connectionString);    
-            ReceiptVouchers = AccountHelper.LoadReceiptVouchers(connectionString);    
+            var (Journal,payments, receipts) = AccountHelper.GetAllVouchers(connectionString);
             (byte[] content, string fileName) = AccountHelper.ExportAllVouchers(
-                JournalVouchers, PaymentVouchers, ReceiptVouchers
+                Journal, payments, receipts
             );
 
             return File(

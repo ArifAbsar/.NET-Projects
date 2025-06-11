@@ -422,10 +422,80 @@ namespace Mini_Accounting_Management_System.Helper
             conn.Open();
             cmd.ExecuteNonQuery();
         }
+      
+       
+    public static (List<Journal_VDTO> Journals,
+                           List<Payment_VDTO> Payments,
+                           List<Reciept_VDTO> Receipts)
+                GetAllVouchers(string connectionString)
+       {
+                var journals = new List<Journal_VDTO>();
+                var payments = new List<Payment_VDTO>();
+                var receipts = new List<Reciept_VDTO>();
+
+                using var conn = new SqlConnection(connectionString);
+                using var cmd = new SqlCommand("dbo.sp_GetAllVouchers", conn)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                conn.Open();
+                using var reader = cmd.ExecuteReader();
+
+                
+                while (reader.Read())
+                {
+                    journals.Add(new Journal_VDTO
+                    {
+                        
+                        ReferenceNo = reader.GetString(reader.GetOrdinal("ReferenceNo")),
+                        SubAccountID = reader.GetInt32(reader.GetOrdinal("SubAccountID")),
+                        VoucherDate = reader.GetDateTime(reader.GetOrdinal("VoucherDate")),
+                        Debit = reader.GetDecimal(reader.GetOrdinal("Debit")),
+                        Credit = reader.GetDecimal(reader.GetOrdinal("Credit"))
+                    });
+                }
+
+               
+                if (reader.NextResult())
+                {
+                    while (reader.Read())
+                    {
+                        payments.Add(new Payment_VDTO
+                        {
+                            
+                            ReferenceNo = reader.GetString(reader.GetOrdinal("ReferenceNo")),
+                            SubAccountID = reader.GetInt32(reader.GetOrdinal("SubAccountID")),
+                            VoucherDate = reader.GetDateTime(reader.GetOrdinal("VoucherDate")),
+                            Debit = reader.GetDecimal(reader.GetOrdinal("Debit")),
+                            Credit = reader.GetDecimal(reader.GetOrdinal("Credit"))
+                        });
+                    }
+                }
+
+                
+                if (reader.NextResult())
+                {
+                    while (reader.Read())
+                    {
+                        receipts.Add(new Reciept_VDTO
+                        {
+                            
+                            ReferenceNo = reader.GetString(reader.GetOrdinal("ReferenceNo")),
+                            SubAccountID = reader.GetInt32(reader.GetOrdinal("SubAccountID")),
+                            VoucherDate = reader.GetDateTime(reader.GetOrdinal("VoucherDate")),
+                            Debit = reader.GetDecimal(reader.GetOrdinal("Debit")),
+                            Credit = reader.GetDecimal(reader.GetOrdinal("Credit"))
+                        });
+                    }
+                }
+
+                return (journals, payments, receipts);
+         }
+        
         public static (byte[] Content, string FileName) ExportAllVouchers(
-            IEnumerable<Journal_VDTO> journalVouchers,
-            IEnumerable<Payment_VDTO> paymentVouchers,
-            IEnumerable<Reciept_VDTO> receiptVouchers
+            List<Journal_VDTO> journalVouchers,
+            List<Payment_VDTO> paymentVouchers,
+            List<Reciept_VDTO> receiptVouchers
         )
         {
             using var workbook = new XLWorkbook();
@@ -452,13 +522,13 @@ namespace Mini_Accounting_Management_System.Helper
 
             //Payments
             var ws2 = workbook.AddWorksheet("Payments");
-            ws1.Cell(1, 1).Value = "ReferenceNo";
-            ws1.Cell(1, 2).Value = "SubAccountID";
-            ws1.Cell(1, 3).Value = "VoucherDate";
-            ws1.Cell(1, 4).Value = "Debit";
-            ws1.Cell(1, 5).Value = "Credit";
+            ws1.Cell(7, 1).Value = "ReferenceNo";
+            ws1.Cell(7, 2).Value = "SubAccountID";
+            ws1.Cell(7, 3).Value = "VoucherDate";
+            ws1.Cell(7, 4).Value = "Debit";
+            ws1.Cell(7, 5).Value = "Credit";
 
-            row = 2;
+            row =8 ;
             foreach (var v in paymentVouchers)
             {
                 ws1.Cell(row, 1).Value = v.ReferenceNo;
@@ -472,13 +542,13 @@ namespace Mini_Accounting_Management_System.Helper
 
             //Receipts
             var ws3 = workbook.AddWorksheet("Receipts");
-            ws1.Cell(1, 1).Value = "ReferenceNo";
-            ws1.Cell(1, 2).Value = "SubAccountID";
-            ws1.Cell(1, 3).Value = "VoucherDate";
-            ws1.Cell(1, 4).Value = "Debit";
-            ws1.Cell(1, 5).Value = "Credit";
+            ws1.Cell(14, 1).Value = "ReferenceNo";
+            ws1.Cell(14, 2).Value = "SubAccountID";
+            ws1.Cell(14, 3).Value = "VoucherDate";
+            ws1.Cell(14, 4).Value = "Debit";
+            ws1.Cell(14, 5).Value = "Credit";
 
-            row = 2;
+            row = 15;
             foreach (var v in receiptVouchers)
             {
                 ws1.Cell(row, 1).Value = v.ReferenceNo;
