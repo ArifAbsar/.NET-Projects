@@ -2,7 +2,7 @@
 @model Mini_Accounting_Management_System.Pages.PrivacyModel
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 <h1>Voucher Entry</h1>
-
+@if(User.Identity.IsAuthenticated==true){
 @* -- Journal Voucher -- *@
 <section class="mb-5">
     <h2>Journal Voucher</h2>
@@ -10,6 +10,13 @@
 
    
     <button id="btnAddJournal" class="btn btn-outline-primary mb-2">Add Voucher</button>
+    <span>
+        <form method="post" asp-page-handler="ExportExcel" class="mb-4">
+            <button type="submit" class="btn btn-outline-success">
+                Export All Vouchers to Excel
+            </button>
+        </form>
+    </span>
 
     <div id="formJournal" class="card p-3 mb-3" style="display:none;">
         <form method="post" asp-page-handler="CreateJournal">
@@ -325,7 +332,7 @@
         </span>
     }
 </div>
-
+}
 @section Scripts {
     <script>
         document.addEventListener('DOMContentLoaded', () => {

@@ -8,6 +8,7 @@ using Mini_Accounting_Management_System.Helper;
 using Microsoft.AspNetCore.Authorization;
 namespace Mini_Accounting_Management_System.Pages
 {
+    [Authorize]
     public class PrivacyModel : PageModel
     {
         private readonly IConfiguration _config;
@@ -253,6 +254,22 @@ namespace Mini_Accounting_Management_System.Pages
             AccountHelper.DeletePaymentVoucher(connString, paymentId);
 
             return RedirectToPage();
+        }
+        public IActionResult OnPostExportExcel()
+        {
+            var connectionString = _config.GetConnectionString("DefaultConnection")!;
+            JournalVouchers = AccountHelper.GetJournalVouchers(connectionString);    
+            PaymentVouchers = AccountHelper.LoadPaymentVouchers(connectionString);    
+            ReceiptVouchers = AccountHelper.LoadReceiptVouchers(connectionString);    
+            (byte[] content, string fileName) = AccountHelper.ExportAllVouchers(
+                JournalVouchers, PaymentVouchers, ReceiptVouchers
+            );
+
+            return File(
+                content,
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                fileName
+            );
         }
     }
 

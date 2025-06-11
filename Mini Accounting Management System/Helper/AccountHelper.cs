@@ -1,4 +1,5 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using ClosedXML.Excel;
+using Microsoft.Data.SqlClient;
 using Mini_Accounting_Management_System.db.Tables;
 using Mini_Accounting_Management_System.DTO;
 using System.Data;
@@ -343,12 +344,10 @@ namespace Mini_Accounting_Management_System.Helper
             {
                 CommandType = CommandType.StoredProcedure
             };
-
-            // Tell the proc to delete a Receipt ('R')
             cmd.Parameters.AddWithValue("@Action", "Delete");
             cmd.Parameters.AddWithValue("@VoucherType", "R");
             cmd.Parameters.AddWithValue("@VoucherID", receiptId);
-            // The rest can be null or zero
+            //can be null
             cmd.Parameters.AddWithValue("@ReferenceNo", DBNull.Value);
             cmd.Parameters.AddWithValue("@SubAccountID", DBNull.Value);
             cmd.Parameters.AddWithValue("@VoucherDate", DBNull.Value);
@@ -423,5 +422,80 @@ namespace Mini_Accounting_Management_System.Helper
             conn.Open();
             cmd.ExecuteNonQuery();
         }
+        public static (byte[] Content, string FileName) ExportAllVouchers(
+            IEnumerable<Journal_VDTO> journalVouchers,
+            IEnumerable<Payment_VDTO> paymentVouchers,
+            IEnumerable<Reciept_VDTO> receiptVouchers
+        )
+        {
+            using var workbook = new XLWorkbook();
+
+            //Journals
+            var ws1 = workbook.AddWorksheet("Journals");
+            ws1.Cell(1, 1).Value = "ReferenceNo";
+            ws1.Cell(1, 2).Value = "SubAccountID";
+            ws1.Cell(1, 3).Value = "VoucherDate";
+            ws1.Cell(1, 4).Value = "Debit";
+            ws1.Cell(1, 5).Value = "Credit";
+
+            int row = 2;
+            foreach (var v in journalVouchers)
+            {
+                ws1.Cell(row, 1).Value = v.ReferenceNo;
+                ws1.Cell(row, 2).Value = v.SubAccountID;
+                ws1.Cell(row, 3).Value = v.VoucherDate;
+                ws1.Cell(row, 4).Value = v.Debit;
+                ws1.Cell(row, 5).Value = v.Credit;
+                row++;
+            }
+            ws1.Columns().AdjustToContents();
+
+            //Payments
+            var ws2 = workbook.AddWorksheet("Payments");
+            ws1.Cell(1, 1).Value = "ReferenceNo";
+            ws1.Cell(1, 2).Value = "SubAccountID";
+            ws1.Cell(1, 3).Value = "VoucherDate";
+            ws1.Cell(1, 4).Value = "Debit";
+            ws1.Cell(1, 5).Value = "Credit";
+
+            row = 2;
+            foreach (var v in paymentVouchers)
+            {
+                ws1.Cell(row, 1).Value = v.ReferenceNo;
+                ws1.Cell(row, 2).Value = v.SubAccountID;
+                ws1.Cell(row, 3).Value = v.VoucherDate;
+                ws1.Cell(row, 4).Value = v.Debit;
+                ws1.Cell(row, 5).Value = v.Credit;
+                row++;
+            }
+            ws2.Columns().AdjustToContents();
+
+            //Receipts
+            var ws3 = workbook.AddWorksheet("Receipts");
+            ws1.Cell(1, 1).Value = "ReferenceNo";
+            ws1.Cell(1, 2).Value = "SubAccountID";
+            ws1.Cell(1, 3).Value = "VoucherDate";
+            ws1.Cell(1, 4).Value = "Debit";
+            ws1.Cell(1, 5).Value = "Credit";
+
+            row = 2;
+            foreach (var v in receiptVouchers)
+            {
+                ws1.Cell(row, 1).Value = v.ReferenceNo;
+                ws1.Cell(row, 2).Value = v.SubAccountID;
+                ws1.Cell(row, 3).Value = v.VoucherDate;
+                ws1.Cell(row, 4).Value = v.Debit;
+                ws1.Cell(row, 5).Value = v.Credit;
+                row++;
+            }
+            ws3.Columns().AdjustToContents();
+
+            using var ms = new MemoryStream();
+            workbook.SaveAs(ms);
+            var content = ms.ToArray();
+            var fileName = $"Vouchers_{DateTime.Today}.xlsx";
+            return (content, fileName);
+        }
     }
 }
+
