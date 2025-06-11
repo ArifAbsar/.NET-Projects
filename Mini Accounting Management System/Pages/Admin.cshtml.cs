@@ -32,7 +32,18 @@ namespace Mini_Accounting_Management_System.Pages
         public void OnGet()
         {
             var connectionString = _config.GetConnectionString("DefaultConnection")!;
-            Users = AccountHelper.GetAllUsersWithRoles(connectionString);
+            var allUsers = AccountHelper.GetAllUsersWithRoles(connectionString);
+            Users = new List<UserRoleDTO>();
+            var current = User.Identity?.Name ?? "";
+
+            foreach (var u in allUsers)
+            {
+                if (!u.UserName.Equals(current, StringComparison.OrdinalIgnoreCase))
+                {
+                    Users.Add(u);
+                }
+            }
+            
             AllRoles = AccountHelper.GetAllRoles(connectionString);
         }
         public IActionResult OnPostAssignRole()

@@ -48,14 +48,14 @@
 </table>
 @section Scripts {
     <script>
-        // Wait 3 seconds, then fade out and remove the alert
+        //Wait 3 seconds, then fade out and remove the alert
         setTimeout(() => {
           const alert = document.getElementById('successAlert');
           if (!alert) return;
-          // fade out over 0.5s
+          //fade out over 0.5s
           alert.style.transition = 'opacity 0.5s';
           alert.style.opacity = '0';
-          // remove it after the fade
+          //remove it after the fade
           setTimeout(() => alert.remove(), 500);
         }, 3000);
     </script>
