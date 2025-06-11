@@ -1,4 +1,3 @@
-![Login_page](https://github.com/user-attachments/assets/aec193f7-7f04-45c8-9ff9-65c8a9543b30)
 # Mini Accounting Management System
 
 ## Overview
@@ -37,6 +36,8 @@ A minimal ASP.NET Core Razor Pages app to manage accounts, record vouchers, and 
 - Entity Framework Core & ADO.NET  
 - ClosedXML  
 - Bootstrap
+## Login Page
+![Login_page](https://github.com/user-attachments/assets/aec193f7-7f04-45c8-9ff9-65c8a9543b30)
 
 ## Admin Control Panel Page (Only Admin Can access this page)
 ![Admin Control Panel](https://github.com/user-attachments/assets/645d781e-8089-4f66-82ea-b3f359181d90)
